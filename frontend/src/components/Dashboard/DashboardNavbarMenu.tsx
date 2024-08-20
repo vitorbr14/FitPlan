@@ -48,7 +48,7 @@ const DashboardNavbarMenu = () => {
               </MenubarTrigger>
               <MenubarContent className=" mt-2">
                 <MenubarItem>
-                  <Link to={"/register"}>{option.op1}</Link>
+                  <Link to={"/dashboard/alunos"}>{option.op1}</Link>
                 </MenubarItem>
                 <MenubarSeparator />
                 <MenubarItem>{option.op2}</MenubarItem>

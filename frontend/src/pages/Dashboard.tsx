@@ -6,7 +6,9 @@ import { Outlet } from "react-router-dom";
 export const Dashboard = () => {
   return (
     <>
-      <DashboardNavbar />
+      <div className="pb-10">
+        <DashboardNavbar />
+      </div>
       <Outlet />
     </>
   );
