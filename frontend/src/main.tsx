@@ -6,7 +6,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Register } from "./pages/Register";
 import { Login } from "./pages/Login";
 import { Dashboard } from "./pages/Dashboard";
+
 import Alunos from "./pages/Alunos";
+import { Formulario } from "./pages/Formulario";
 
 const router = createBrowserRouter([
   {
@@ -29,12 +31,14 @@ const router = createBrowserRouter([
         path: "/dashboard/alunos",
         element: <Alunos />,
       },
+      {
+        path: "/dashboard/af",
+        element: <Formulario />,
+      },
     ],
   },
 ]);
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>
+  <RouterProvider router={router} />
 );

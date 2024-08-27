@@ -6,14 +6,16 @@ import DashboardNavbarMenu from "./DashboardNavbarMenu";
 
 export const DashboardNavbar = () => {
   return (
-    <div className="bg-blue-600 py-5">
+    <div className="bg-blue-600 py-5 ">
       <Container>
         <div className="flex justify-between items-center">
           <div className="flex">
             <div className="pr-4">
               <h1 className="text-white text-2xl font-bold">Logo</h1>
             </div>
-            <DashboardNavbarMenu />
+            <div className="hidden md:flex">
+              <DashboardNavbarMenu />
+            </div>
           </div>
 
           <div>

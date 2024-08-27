@@ -45,7 +45,7 @@ const AlunosTable = () => {
       <TableHeader>
         <TableRow className="">
           <TableHead className="">Aluno</TableHead>
-          <TableHead className="">Tel</TableHead>
+          <TableHead className="md:block hidden">Tel</TableHead>
           <TableHead className="">Ações</TableHead>
         </TableRow>
       </TableHeader>
@@ -70,7 +70,9 @@ const AlunosTable = () => {
                 </div>
               </div>
             </TableCell>
-            <TableCell>{invoice.telefone}</TableCell>
+            <TableCell className="md:block hidden">
+              {invoice.telefone}
+            </TableCell>
             <TableCell>
               <Button variant="default">Editar</Button>
             </TableCell>

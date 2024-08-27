@@ -1,7 +1,7 @@
 import { FaRegBell } from "react-icons/fa6";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-
+import { MdMenu } from "react-icons/md";
 const DashboardUserInfo = () => {
   return (
     <div className="flex items-center">
@@ -14,11 +14,13 @@ const DashboardUserInfo = () => {
         </div>
 
         <div>
-          <h1 className="text-white">User</h1>
+          <h1 className="text-white hidden md:block">User</h1>
         </div>
       </div>
-
-      <div className="pl-6">
+      <div className="text-white text-2xl cursor-pointer md:hidden block">
+        <MdMenu />
+      </div>
+      <div className="pl-6 hidden md:block">
         <Avatar>
           <AvatarImage src="https://github.com/shadcn.png" />
           <AvatarFallback>CN</AvatarFallback>
