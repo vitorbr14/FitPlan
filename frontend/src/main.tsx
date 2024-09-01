@@ -9,6 +9,7 @@ import { Dashboard } from "./pages/Dashboard";
 
 import Alunos from "./pages/Alunos";
 import { Formulario } from "./pages/Formulario";
+import { AlunoPerfil } from "./pages/AlunoPerfil";
 
 const router = createBrowserRouter([
   {
@@ -32,8 +33,8 @@ const router = createBrowserRouter([
         element: <Alunos />,
       },
       {
-        path: "/dashboard/af",
-        element: <Formulario />,
+        path: "/dashboard/alunos/:id",
+        element: <AlunoPerfil />,
       },
     ],
   },

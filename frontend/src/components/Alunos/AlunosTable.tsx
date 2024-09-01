@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
+import { Link } from "react-router-dom";
 
 const pessoas = [
   {
@@ -45,7 +46,9 @@ const AlunosTable = () => {
       <TableHeader>
         <TableRow className="">
           <TableHead className="">Aluno</TableHead>
-          <TableHead className="md:block hidden">Tel</TableHead>
+          <TableHead className="md:flex md:items-centergit hidden">
+            Tel
+          </TableHead>
           <TableHead className="">Ações</TableHead>
         </TableRow>
       </TableHeader>
@@ -53,22 +56,24 @@ const AlunosTable = () => {
         {pessoas.map((invoice) => (
           <TableRow key={invoice.nome}>
             <TableCell className="font-medium ">
-              <div className="flex">
-                <div>
-                  <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </div>
-                <div className="pl-2">
-                  <div className="flex flex-col">
-                    <span>{invoice.nome}</span>
-                    <span className="text-sm text-gray-500 font-normal">
-                      {invoice.email}
-                    </span>
+              <Link to="/dashboard/alunos/123">
+                <div className="flex">
+                  <div>
+                    <Avatar>
+                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </div>
+                  <div className="pl-2">
+                    <div className="flex flex-col">
+                      <span>{invoice.nome}</span>
+                      <span className="text-sm text-gray-500 font-normal">
+                        {invoice.email}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             </TableCell>
             <TableCell className="md:block hidden">
               {invoice.telefone}
