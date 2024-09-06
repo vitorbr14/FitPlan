@@ -1,65 +1,97 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { BtnTabela } from "../BtnTabela";
 import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
+import { MatriculaPagamento } from "./NovaMatricula/MatriculaPagamento";
+import { Button } from "@/components/ui/button";
+
+import { NovaMatriculaPlanos } from "./NovaMatricula/NovaMatriculaPlanos";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Form } from "@/components/ui/form";
+
+const planoSchema = z.object({
+  plano: z.enum(["plano_1", "plano_2", "plano_3"], {
+    required_error: "Escolha uma opção de plano.",
+  }),
+  inicio_matricula: z.date({ required_error: "Escolha a data de inicio." }),
+});
 
 export const MatriculaTabela = () => {
+  const form = useForm<z.infer<typeof planoSchema>>({
+    resolver: zodResolver(planoSchema),
+  });
+
+  function onSubmit(values: z.infer<typeof planoSchema>) {
+    console.log(values);
+  }
+
   return (
     <div className="relative">
-      <BtnTabela label=" Nova Matrícula" />
+      <Dialog>
+        <DialogTrigger>
+          <BtnTabela label=" Nova Matrícula" />
+        </DialogTrigger>
+        <DialogContent className="">
+          <DialogHeader>
+            <DialogTitle>Adicionar nova matrícula.</DialogTitle>
+          </DialogHeader>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div>
+                <span className="font-semibold">Tipo de plano:</span>
+                <div className="py-4 ">
+                  <NovaMatriculaPlanos
+                    control={form.control}
+                    watch={form.watch}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <span className="font-semibold">Informações da matrícula:</span>
+                <div className="pt-4">
+                  <MatriculaPagamento
+                    getValues={form.getValues}
+                    control={form.control}
+                  />
+                </div>
+
+                <div className="flex">
+                  <DialogFooter>
+                    <Button type="submit">Concluir Matrícula</Button>
+                    <DialogClose asChild>
+                      <Button type="button" variant="destructive">
+                        Cancelar
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </div>
+              </div>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+
       <Table>
         <TableHeader>
           <TableRow className="bg-gray-100">
