@@ -86,15 +86,15 @@ export function MatriculaPagamento({
                   !date && "text-muted-foreground"
                 )}
               >
-                {getValues("plano") === "plano_1" &&
+                {getValues("plano_option") === "plano_1" &&
                   dayjs(getValues("inicio_matricula"))
                     .add(1, "month")
                     .format("DD/MM/YYYY")}
-                {getValues("plano") === "plano_2" &&
+                {getValues("plano_option") === "plano_2" &&
                   dayjs(getValues("inicio_matricula"))
                     .add(6, "months")
                     .format("DD/MM/YYYY")}
-                {getValues("plano") === "plano_3" &&
+                {getValues("plano_option") === "plano_3" &&
                   dayjs(getValues("inicio_matricula"))
                     .add(1, "year")
                     .format("DD/MM/YYYY")}

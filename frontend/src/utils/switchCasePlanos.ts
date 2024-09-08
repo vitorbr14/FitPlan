@@ -1,18 +1,14 @@
 import dayjs from "dayjs";
 
-export const switchCasePlanos = (date: any, selectedOption: string) => {
+export const switchCasePlanos = (date: any, selectedOption: any) => {
   switch (selectedOption) {
     case "plano_1":
-      return date && dayjs(date).add(5, "day").format("DD/MM/YYYY");
+      return date && dayjs(date).add(1, "month").format("DD/MM/YYYY");
 
     case "plano_2":
-      return date && dayjs(date).add(10, "day").format("DD/MM/YYYY");
+      return date && dayjs(date).add(6, "months").format("DD/MM/YYYY");
 
     case "plano_3":
-      return date && dayjs(date).add(15, "day").format("DD/MM/YYYY");
-
-    default:
-      // Valor padrão caso nenhum radio esteja selecionado
-      return dayjs().format("DD/MM/YYYY");
+      return date && dayjs(date).add(1, "year").format("DD/MM/YYYY");
   }
 };
