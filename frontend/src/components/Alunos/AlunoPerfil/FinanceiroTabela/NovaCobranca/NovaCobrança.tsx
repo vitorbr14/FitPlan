@@ -19,25 +19,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { format } from "date-fns";
+import { z } from "zod";
 import { CalendarIcon } from "lucide-react";
 import dayjs from "dayjs";
 import { Calendar } from "@/components/ui/calendar";
-import { useState } from "react";
+
 import { Input } from "@/components/ui/input";
 import { switchCasePlanos } from "@/utils/switchCasePlanos";
+import { UseFormReturn } from "react-hook-form";
+import { cobrancaSchema } from "../AlunoPerfilFinanceiroTable";
 type TypeNovaCobrança = {
-  control: any;
-  getValues: any;
-  watch: any;
+  form: UseFormReturn<z.infer<typeof cobrancaSchema>>;
 };
-export const NovaCobrança = ({
-  control,
-  getValues,
-  watch,
-}: TypeNovaCobrança) => {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-
+export const NovaCobrança = ({ form }: TypeNovaCobrança) => {
   return (
     <div>
       <div className="flex gap-2 flex-col">
@@ -49,7 +43,7 @@ export const NovaCobrança = ({
         <div className="flex items-center gap-2 ">
           <div className="w-full">
             <FormField
-              control={control}
+              control={form.control}
               name="plano_option"
               render={({ field }) => (
                 <FormItem>
@@ -59,7 +53,7 @@ export const NovaCobrança = ({
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        value={watch("plano_option")}
+                        value={form.watch("plano_option")}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -91,7 +85,7 @@ export const NovaCobrança = ({
         <div className="flex items-center gap-2 ">
           <div className="w-full">
             <FormField
-              control={control}
+              control={form.control}
               name="plano_inicio"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
@@ -140,8 +134,8 @@ export const NovaCobrança = ({
               disabled
               value={
                 switchCasePlanos(
-                  dayjs(watch("plano_inicio")),
-                  getValues("plano_option")
+                  dayjs(form.watch("plano_inicio")),
+                  form.getValues("plano_option")
                 ) || "Vencimento"
               }
             />

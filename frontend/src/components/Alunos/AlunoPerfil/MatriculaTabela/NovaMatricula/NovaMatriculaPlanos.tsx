@@ -8,6 +8,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { UseFormReturn } from "react-hook-form";
+import { z } from "zod";
+import { planoSchema } from "../MatriculaTabela";
 const planos = [
   {
     id: 1,
@@ -33,16 +36,12 @@ const planos = [
 ];
 
 type TypePropsNovaMatriculaPlanos = {
-  control: any;
-  watch: any;
+  form: UseFormReturn<z.infer<typeof planoSchema>>;
 };
-export const NovaMatriculaPlanos = ({
-  control,
-  watch,
-}: TypePropsNovaMatriculaPlanos) => {
+export const NovaMatriculaPlanos = ({ form }: TypePropsNovaMatriculaPlanos) => {
   return (
     <FormField
-      control={control}
+      control={form.control}
       name="plano"
       render={({ field }) => (
         <FormItem className="space-y-3">
@@ -52,7 +51,7 @@ export const NovaMatriculaPlanos = ({
               onValueChange={field.onChange}
               defaultValue={field.value}
               className="flex justify-between"
-              value={watch("plano")}
+              value={form.watch("plano")}
             >
               {planos.map((plano) => {
                 return (

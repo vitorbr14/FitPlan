@@ -122,11 +122,7 @@ export const AlunoPerfilFinanceiroTable = () => {
         <DialogContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              <NovaCobrança
-                control={form.control}
-                getValues={form.getValues}
-                watch={form.watch}
-              />
+              <NovaCobrança form={form} />
 
               <Button type="submit">Nova Cobrança</Button>
             </form>

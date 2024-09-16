@@ -17,15 +17,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { UseFormReturn } from "react-hook-form";
+import { z } from "zod";
+import { planoSchema } from "../MatriculaTabela";
 
 type TypeMatriculaPagamento = {
-  getValues: any;
-  control: any;
+  form: UseFormReturn<z.infer<typeof planoSchema>>;
 };
-export function MatriculaPagamento({
-  getValues,
-  control,
-}: TypeMatriculaPagamento) {
+export function MatriculaPagamento({ form }: TypeMatriculaPagamento) {
   const [date, setDate] = React.useState<Date>();
 
   return (
@@ -33,7 +32,7 @@ export function MatriculaPagamento({
       <div>
         <div className="flex items-center">
           <FormField
-            control={control}
+            control={form.control}
             name="inicio_matricula"
             render={({ field }) => (
               <FormItem className="">
@@ -86,7 +85,7 @@ export function MatriculaPagamento({
                   !date && "text-muted-foreground"
                 )}
               >
-                {getValues("plano_option") === "plano_1" &&
+                {/* {form.getValues("plano_option") === "plano_1" &&
                   dayjs(getValues("inicio_matricula"))
                     .add(1, "month")
                     .format("DD/MM/YYYY")}
@@ -99,7 +98,7 @@ export function MatriculaPagamento({
                     .add(1, "year")
                     .format("DD/MM/YYYY")}
 
-                {getValues("plano") === undefined && "Próxima Cobrança"}
+                {getValues("plano") === undefined && "Próxima Cobrança"} */}
 
                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
               </Button>

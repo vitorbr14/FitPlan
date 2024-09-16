@@ -29,7 +29,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
 
-const planoSchema = z.object({
+export const planoSchema = z.object({
   plano: z.enum(["plano_1", "plano_2", "plano_3"], {
     required_error: "Escolha uma opção de plano.",
   }),
@@ -60,20 +60,14 @@ export const MatriculaTabela = () => {
               <div>
                 <span className="font-semibold">Tipo de plano:</span>
                 <div className="py-4 ">
-                  <NovaMatriculaPlanos
-                    control={form.control}
-                    watch={form.watch}
-                  />
+                  <NovaMatriculaPlanos form={form} />
                 </div>
               </div>
 
               <div>
                 <span className="font-semibold">Informações da matrícula:</span>
                 <div className="pt-4">
-                  <MatriculaPagamento
-                    getValues={form.getValues}
-                    control={form.control}
-                  />
+                  <MatriculaPagamento form={form} />
                 </div>
 
                 <div className="flex">

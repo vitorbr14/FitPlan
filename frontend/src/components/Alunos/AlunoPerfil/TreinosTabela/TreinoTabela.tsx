@@ -11,6 +11,15 @@ import {
 } from "@/components/ui/table";
 import { BtnTabela } from "../BtnTabela";
 import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { NovoTreino } from "./NovoTreino/NovoTreino";
 
 const invoices = [
   {
@@ -60,7 +69,15 @@ const invoices = [
 export const TreinoTabela = () => {
   return (
     <div className="relative">
-      <BtnTabela label=" Novo Treino" />
+      <Dialog>
+        <DialogTrigger>
+          <BtnTabela label=" Novo Treino" />
+        </DialogTrigger>
+
+        <DialogContent className="max-w-4xl">
+          <NovoTreino />
+        </DialogContent>
+      </Dialog>
       <Table>
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>

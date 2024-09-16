@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 export const AlunoPerfilNavbar = () => {
   return (
     <>
-      <Tabs defaultValue="account">
+      <Tabs defaultValue="info">
         <TabsList className="">
           <TabsTrigger value="info" className="">
             Informações
