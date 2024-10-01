@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { BadRequestError } from "../src/errors/api-errors";
-import admin from "../src/firebase";
+import { BadRequestError } from "../errors/api-errors";
+import admin from "../firebase";
 const prisma = new PrismaClient();
 
 export const createAdmin = async (req: Request, res: Response) => {

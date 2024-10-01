@@ -60,6 +60,14 @@ model aluno {
   role_id Int
    academia Academia @relation(fields: [academia_id], references: [id])
   academia_id Int
+   estado_civil_id   Int         
+  estadoCivil     EstadoCivil  @relation(fields: [estado_civil_id], references: [id])
+  sexo_id Int
+  sexo sexo @relation(fields: [sexo_id], references: [id])
+  contato contato[]
+  endereco_id Int
+  endereco endereco @relation(fields: [endereco_id], references: [id])
+ 
 }
 model Role {
   id        Int      @id @default(autoincrement())
@@ -69,3 +77,33 @@ model Role {
   aluno_id aluno[]
 }
 
+model contato {
+  id Int @id @default(autoincrement())
+  telefone String
+  isWpp Boolean
+  aluno aluno? @relation(fields: [aluno_id], references: [id])
+  aluno_id Int?
+}
+
+model EstadoCivil {
+  id          Int      @id @default(autoincrement())
+  name   String
+  alunos      aluno[]   
+}
+
+model sexo {
+  id          Int      @id @default(autoincrement())
+  sexo   String
+  alunos      aluno[]   
+}
+
+
+
+
+model endereco {
+  id          Int      @id @default(autoincrement())
+ cidade String
+ rua String
+ bairro String
+  alunos      aluno[]   
+}

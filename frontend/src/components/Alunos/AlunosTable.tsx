@@ -35,6 +35,9 @@ type Aluno = {
   nome: string;
   role_id: number;
   academia_id: number;
+  estado_civil_id: number;
+  sexo_id: number;
+  endereco_id: number;
 };
 
 type ResponseData = {
@@ -74,8 +77,6 @@ const AlunosTable = () => {
 
   return (
     <div>
-      <Button onClick={() => console.log(alunos)}>alunos</Button>
-
       <Table className="">
         <TableHeader>
           <TableRow className="">

@@ -26,6 +26,7 @@ export const getAlunos = async (req: Request, res: Response) => {
           nome: "asc",
         },
       ],
+
       skip: (Number(skip) - 1) * Number(take),
       take: Number(take),
     });
@@ -52,4 +53,8 @@ export const getAlunos = async (req: Request, res: Response) => {
     alunos,
     paginas,
   });
+};
+
+export const newAluno = async (req: Request, res: Response) => {
+  res.json("teste");
 };
