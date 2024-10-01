@@ -5,8 +5,11 @@ import { Input } from "../ui/input";
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { NovoAlunoForm } from "./NovoAluno/NovoAlunoForm";
+import { useSearchAluno } from "@/store/searchAlunoStore";
 
-export const AlunoTableNavbar = () => {
+export const AlunoTableNavbar = ({}) => {
+  const [searchInput, setSearchInput] = useState("");
+  const { handleSearch } = useSearchAluno();
   return (
     <>
       <div className="bg-blue-600 p-4 rounded-md mb-2  ">
@@ -26,8 +29,15 @@ export const AlunoTableNavbar = () => {
           </div>
           <div>
             <div className="flex items-center  ">
-              <Input className="h-6" placeholder="Procurar aluno..." />
-              <FaMagnifyingGlass className="text-2xl ml-2 text-white" />
+              <Input
+                className="h-6"
+                placeholder="Procurar aluno..."
+                onChange={(e) => setSearchInput(e.target.value)}
+              />
+              <FaMagnifyingGlass
+                className="text-2xl ml-2 text-white"
+                onClick={() => handleSearch(searchInput)}
+              />
             </div>
           </div>
         </div>

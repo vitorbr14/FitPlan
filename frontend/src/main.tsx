@@ -6,10 +6,18 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Register } from "./pages/Register";
 import { Login } from "./pages/Login";
 import { Dashboard } from "./pages/Dashboard";
-
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import Alunos from "./pages/Alunos";
 import { Formulario } from "./pages/Formulario";
 import { AlunoPerfil } from "./pages/AlunoPerfil";
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -41,5 +49,7 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")!).render(
-  <RouterProvider router={router} />
+  <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router} />
+  </QueryClientProvider>
 );

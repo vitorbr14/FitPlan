@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Academia {
+  id            Int      @id @default(autoincrement())
+  nome_academia String
+  telefone      String
+  cnpj          String
+
+  admin         admin?    @relation(fields: [admin_id], references: [id]) 
+  admin_id      String?  @unique
+  professor_id  Professor[]
+  aluno_id      aluno[]
+}
+
+
+model Professor {
+  id        Int      @id @default(autoincrement())
+  nome String
+  email String
+  telefone String
+  nascimento String
+  sexo String
+  cpf String
+  endereco String
+  role Role @relation(fields: [role_id], references: [id])
+  role_id Int
+   academia Academia @relation(fields: [academia_id], references: [id])
+  academia_id Int
+  
+}
+
+
+model admin {
+  id          String     @id
+  email       String
+  nome_admin  String
+  role        Role       @relation(fields: [role_id], references: [id])
+  role_id     Int
+  academia    Academia?  // Relação opcional, pois um admin pode não estar associado a nenhuma academia ainda
+}
+
+model aluno {
+  email String
+  id        Int      @id @default(autoincrement())
+  nome String
+   role Role @relation(fields: [role_id], references: [id])
+  role_id Int
+   academia Academia @relation(fields: [academia_id], references: [id])
+  academia_id Int
+}
+model Role {
+  id        Int      @id @default(autoincrement())
+  role_name String
+  professor_id Professor[]
+  admin_id admin[]
+  aluno_id aluno[]
+}
+
