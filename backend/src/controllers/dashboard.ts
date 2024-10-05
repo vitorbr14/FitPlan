@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+import { BadRequestError } from "../errors/api-errors";
 
 const prisma = new PrismaClient();
 
@@ -23,9 +24,15 @@ export const getAlunos = async (req: Request, res: Response) => {
       },
       orderBy: [
         {
-          nome: "asc",
+          nome: "desc",
         },
       ],
+      include: {
+        endereco: true,
+        contato: true,
+        estadoCivil: true,
+        sexo: true,
+      },
 
       skip: (Number(skip) - 1) * Number(take),
       take: Number(take),
@@ -42,7 +49,7 @@ export const getAlunos = async (req: Request, res: Response) => {
   const alunos = await prisma.aluno.findMany({
     orderBy: [
       {
-        nome: "asc",
+        nome: "desc",
       },
     ],
     skip: (Number(skip) - 1) * Number(take),
@@ -56,5 +63,18 @@ export const getAlunos = async (req: Request, res: Response) => {
 };
 
 export const newAluno = async (req: Request, res: Response) => {
-  res.json("teste");
+  const { email, nome, role_id } = req.body;
+  const createAluno = await prisma.aluno.create({
+    data: {
+      email: email,
+      nome: nome,
+      role_id: role_id,
+      academia_id: 1,
+    },
+  });
+
+  if (!createAluno) {
+    throw new BadRequestError("Algo deu errado, tente novamente mais tarde.");
+  }
+  res.json({ createAluno });
 };

@@ -56,3 +56,31 @@ export const formSchema = z.object({
 export type typeForm = {
   form: any;
 };
+
+export const createUserSchema = z.object({
+  email: z.string().email(),
+  nome: z.string(),
+  role_id: z.number(),
+  academia_id: z.number(),
+});
+
+export const novoUserInfos = z.object({
+  cidade: z.string(),
+  rua: z.string(),
+  bairro: z.string(),
+  aluno_id: z.number(),
+});
+
+export const novoAlunoContatos = z.object({
+  contato: z.object({
+    telefone: z.string().min(8),
+    iswapp: z.boolean().default(true).optional(),
+    aluno_id: z.number(),
+  }),
+  endereco: z.object({
+    cidade: z.string().min(4),
+    rua: z.string().min(4),
+    bairro: z.string().min(4),
+    aluno_id: z.number(),
+  }),
+});

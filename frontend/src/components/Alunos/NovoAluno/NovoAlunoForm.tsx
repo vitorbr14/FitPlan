@@ -1,110 +1,95 @@
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useEffect, useState } from "react";
+
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
-import { Form1 } from "./Form1";
-import { Form2 } from "./Form2";
-import { formSchema } from "@/types/types";
-import { Form3 } from "./Form3";
-import { Form4 } from "./Form4";
-import { Form5 } from "./Form5";
+import { useNavigate } from "react-router-dom";
+import { createUserSchema } from "@/types/types";
 
-export const NovoAlunoForm = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {},
-    mode: "onChange",
+import { CreateAluno } from "./CreateAluno";
+import axios from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { CreateAlunoInfos } from "./CreateAlunoInfos";
+
+type TypeNovoAlunoFormProps = {
+  setFormIndex: React.Dispatch<React.SetStateAction<number>>;
+  setAluno_id: React.Dispatch<React.SetStateAction<number>>;
+};
+export const NovoAlunoForm = ({
+  setFormIndex,
+  setAluno_id,
+}: TypeNovoAlunoFormProps) => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  //  NOVO FORMULARIO
+
+  const novoUserForm = useForm<z.infer<typeof createUserSchema>>({
+    resolver: zodResolver(createUserSchema),
+    defaultValues: {
+      role_id: 1,
+      academia_id: 1,
+    },
   });
 
-  const [currentIndex, setCurrentIndex] = useState(1);
-  const [formProgress, setFormProgress] = useState(20);
+  const userInfosForm = useForm<z.infer<typeof createUserSchema>>({
+    resolver: zodResolver(createUserSchema),
+  });
 
-  const stepsOptions = [
-    {
-      fields: ["fullname", "firstName", "email", "sex", "cpf", "rg"],
-    },
-    {
-      fields: ["birth", "marital", "phone1"],
-    },
-
-    {
-      fields: ["address", "numero", "bairro", "city"],
-    },
-    {
-      fields: ["matricula"],
-    },
-    {
-      label: "Step 5",
-      info: "Complete",
-    },
-  ];
-
-  const nextStep = async () => {
-    const fields = stepsOptions[currentIndex - 1].fields;
-
-    const output = await form.trigger(fields as any, { shouldFocus: true });
-    if (!output) return;
-    if (currentIndex >= stepsOptions.length) return;
-
-    setFormProgress(formProgress + 20);
-    setCurrentIndex(currentIndex + 1);
+  type mutatePost = {
+    email: string;
+    nome: string;
+    role_id: number;
+    academia_id: number;
   };
 
-  const backStep = () => {
-    if (currentIndex <= 1) return;
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: (newAluno: mutatePost) => {
+      return axios.post(
+        `${import.meta.env.VITE_API_URL}dashboard/newaluno`,
+        newAluno
+      );
+    },
+    onSuccess: (newAluno) => {
+      queryClient.invalidateQueries({ queryKey: ["alunos"] });
+      setAluno_id(newAluno.data.createAluno.id);
+    },
+  });
 
-    setFormProgress(formProgress - 20);
-    setCurrentIndex(currentIndex - 1);
-  };
+  async function handleNewAluno(values: z.infer<typeof createUserSchema>) {
+    mutate({
+      nome: values.nome,
+      email: values.email,
+      academia_id: 1,
+      role_id: 1,
+    });
 
-  const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-  };
+    setFormIndex(2);
+  }
+  //  NOVO FORMULARIO
 
   return (
     <div className="">
       <div>
-        <div className="text-xl">Cadastrar novo aluno</div>
-        <div className="py-6">
-          <Progress value={formProgress} />
-        </div>
-        <div className="">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)}>
-              <div className="grid grid-cols-12 gap-1  h-auto  items-center">
-                {currentIndex === 1 && <Form1 form={form} />}
+        <>
+          <div className="text-xl">Cadastrar novo aluno</div>
 
-                {currentIndex === 2 && <Form2 form={form} />}
-                {currentIndex === 3 && <Form3 form={form} />}
-                {currentIndex === 4 && <Form4 form={form} />}
-                {currentIndex === 5 && <Form5 form={form} />}
-              </div>
-
-              <div className="py-4">
-                {currentIndex === 5 ? (
-                  <Button
-                    type="button"
-                    onClick={() => form.handleSubmit(handleSubmit)()}
-                  >
-                    Enviar
-                  </Button>
-                ) : (
-                  <Button className="mr-2" onClick={nextStep} type="button">
-                    Avançar
-                  </Button>
-                )}
-
-                <Button className="mr-2" onClick={backStep} type="button">
-                  Voltar
+          <div className="">
+            <Form {...novoUserForm}>
+              <form onSubmit={novoUserForm.handleSubmit(handleNewAluno)}>
+                <div className="grid grid-cols-12 gap-1  h-auto  items-center">
+                  <CreateAluno form={novoUserForm} />
+                </div>
+                <Button type="submit" disabled={isPending}>
+                  Avançar
                 </Button>
-              </div>
-            </form>
-            <div className="flex gap-2 pt-7"></div>
-          </Form>
-        </div>
+              </form>
+            </Form>
+          </div>
+        </>
       </div>
     </div>
   );

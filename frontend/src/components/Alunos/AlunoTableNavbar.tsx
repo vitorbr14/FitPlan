@@ -6,9 +6,13 @@ import { Input } from "../ui/input";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { NovoAlunoForm } from "./NovoAluno/NovoAlunoForm";
 import { useSearchAluno } from "@/store/searchAlunoStore";
+import { CreateAlunoInfos } from "./NovoAluno/CreateAlunoInfos";
+import { Button } from "../ui/button";
 
 export const AlunoTableNavbar = ({}) => {
   const [searchInput, setSearchInput] = useState("");
+  const [formIndex, setFormIndex] = useState(1);
+  const [aluno_id, setAluno_id] = useState(0);
   const { handleSearch } = useSearchAluno();
   return (
     <>
@@ -22,7 +26,13 @@ export const AlunoTableNavbar = ({}) => {
                   <span className="md:block hidden">Adicionar Aluno</span>
                 </DialogTrigger>
                 <DialogContent className="lg:w-5/12 md:w-full w-11/12 rounded-md">
-                  <NovoAlunoForm />
+                  {formIndex === 1 && (
+                    <NovoAlunoForm
+                      setFormIndex={setFormIndex}
+                      setAluno_id={setAluno_id}
+                    />
+                  )}
+                  {formIndex === 2 && <CreateAlunoInfos aluno_id={aluno_id} />}
                 </DialogContent>
               </Dialog>
             </div>

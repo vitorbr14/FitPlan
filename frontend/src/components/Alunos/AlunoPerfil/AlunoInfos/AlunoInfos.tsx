@@ -1,56 +1,34 @@
 import { Badge } from "@/components/ui/badge";
 
+import { BtnTabela } from "../BtnTabela";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { EditarAlunoForm } from "./EditarAluno/EditarAlunoForm";
+
 export const AlunoInfos = () => {
-  const usuarios = [
-    {
-      nome: "John Doe",
-      email: "johndoe123@example.com",
-      telefone: "(11) 98765-4321",
-      idade: 22,
-      vinculo: "aluno",
-    },
-  ];
+  // Aqui tem o GET das inforamações do Aluno da Api.
 
   return (
-    <div>
-      <div>
-        <div className="flex flex-col py-3">
-          <span className="uppercase text-xs text-gray-500 font-semibold">
-            E-mail:
-          </span>
-          <span>
-            <span className="text-sm">johndoe@email.com</span>
-          </span>
-        </div>
+    <div className="relative ">
+      <Dialog>
+        <DialogTrigger>
+          <BtnTabela label="Adicionar contatos e endereço" />
+        </DialogTrigger>
+        <DialogContent className="">
+          <DialogHeader>
+            <DialogTitle>Editar Informações do Aluno</DialogTitle>
+          </DialogHeader>
 
-        <div className="flex flex-col pb-3">
-          <span className="uppercase text-xs text-gray-500 font-semibold">
-            Tel:
-          </span>
-          <span>
-            <span className="text-sm">(11) 98765-4321</span>
-          </span>
-        </div>
+          <EditarAlunoForm />
+        </DialogContent>
+      </Dialog>
 
-        <div className="flex flex-col">
-          <span className="uppercase text-xs text-gray-500 font-semibold">
-            Idade:
-          </span>
-          <span>
-            <span className="text-sm">22</span>
-          </span>
-        </div>
-
-        <div className="flex flex-col pb-3">
-          <span className="uppercase text-xs text-gray-500 font-semibold">
-            Vínculo:
-          </span>
-          <span>
-            {/* <span className="text-sm">(11) 98765-4321</span> */}
-            <Badge>Aluno</Badge>
-          </span>
-        </div>
-      </div>
+      <h1>Alunos Info</h1>
     </div>
   );
 };
