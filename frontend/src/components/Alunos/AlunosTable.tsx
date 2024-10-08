@@ -95,7 +95,7 @@ const AlunosTable = () => {
             alunos.alunos.map((aluno) => (
               <TableRow key={aluno.id}>
                 <TableCell className="font-medium w-2/4">
-                  <Link to="/dashboard/alunos/123">
+                  <Link to={`/dashboard/alunos/${aluno.id}`}>
                     <div className="flex">
                       <div>
                         <Avatar>

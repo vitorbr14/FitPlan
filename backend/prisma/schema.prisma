@@ -110,3 +110,7 @@ model endereco {
   aluno aluno @relation(fields: [aluno_id], references: [id])
   aluno_id Int @unique
 }
+model matricula {
+   id          Int      @id @default(autoincrement())
+
+}

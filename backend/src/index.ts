@@ -2,6 +2,7 @@ import "express-async-errors";
 import express, { NextFunction, Request, Response } from "express";
 import auth from "../src/routes/auth";
 import dashboard from "../src/routes/dashboard";
+import aluno_info from "../src/routes/aluno_info";
 var cors = require("cors");
 import { errorMiddleware } from "./middlewares/error";
 import {
@@ -18,6 +19,7 @@ app.use(cors());
 app.use("/api/auth", auth);
 // app.use("/api/dashboard", authMiddleware, dashboard);
 app.use("/api/dashboard", dashboard);
+app.use("/api/aluno", aluno_info);
 // app.use(errorMiddleware);
 
 app.listen(5656, () => {

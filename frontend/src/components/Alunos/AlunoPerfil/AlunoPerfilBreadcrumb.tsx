@@ -7,7 +7,10 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-export const AlunoPerfilBreadcrumb = () => {
+type AlunoPerfilBreadcrumb = {
+  nome: string;
+};
+export const AlunoPerfilBreadcrumb = ({ nome }: AlunoPerfilBreadcrumb) => {
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -20,7 +23,7 @@ export const AlunoPerfilBreadcrumb = () => {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage>John Doe</BreadcrumbPage>
+          <BreadcrumbPage>{nome}</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
