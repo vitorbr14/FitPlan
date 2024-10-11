@@ -84,3 +84,25 @@ export const novoAlunoContatos = z.object({
     aluno_id: z.number(),
   }),
 });
+
+export type planosType = {
+  id: number;
+  plano: string;
+  plano_price: string;
+};
+
+type Plano = {
+  id: number;
+  plano: string;
+  plano_price: string;
+};
+
+export type Matricula = {
+  id: number;
+  aluno_id: number;
+  academia_id: number;
+  plano_id: number;
+  inicio: string; // ou Date, se preferir trabalhar com objetos de data
+  status: boolean;
+  plano: Plano;
+};

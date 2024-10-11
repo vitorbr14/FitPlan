@@ -23,6 +23,7 @@ model Academia {
   admin_id      String?  @unique
   professor_id  Professor[]
   aluno_id      aluno[]
+  matricula matricula[]
 }
 
 
@@ -67,6 +68,8 @@ model aluno {
   
   contato contato[]
   endereco endereco?
+
+  matricula matricula?
  
  
 }
@@ -110,7 +113,26 @@ model endereco {
   aluno aluno @relation(fields: [aluno_id], references: [id])
   aluno_id Int @unique
 }
-model matricula {
-   id          Int      @id @default(autoincrement())
 
+
+model plano {
+    id          Int      @id @default(autoincrement())
+    plano String
+    plano_price String
+    matricula matricula[]
+}
+
+model matricula {
+    id          Int      @id @default(autoincrement())
+    aluno aluno @relation(fields: [aluno_id], references: [id])
+    aluno_id Int @unique
+
+    academia Academia @relation(fields: [academia_id], references: [id])
+    academia_id Int 
+
+    plano plano @relation(fields: [plano_id], references: [id])
+    plano_id Int 
+
+    inicio DateTime 
+    status Boolean
 }

@@ -1,15 +1,11 @@
-type FormatDateType = {
-  date: string | undefined;
-};
+// As datas da API vem neste formato: 2024-11-07T03:00:00.000Z
+// A função serve para trazer Para o formato DIA/MES/ANO
 
-export const formatDate = (date: any) => {
-  const zeroAesquerda = (numero: number) => {
-    if (numero < 10) return `0${numero}`;
-    return numero;
-  };
+export const formatarData = (dataApi: string): string => {
+  const separate = dataApi.split("T")[0];
+  const separate2 = separate.split("-");
+  const obj = { ...separate2 };
 
-  const getDay = zeroAesquerda(date.getDay());
-  const getMonth = zeroAesquerda(date.getMonth());
-  const getYear = date.getFullYear();
-  return `${getDay}/${getMonth}/${getYear}`;
+  const novaData = `${obj[2]}/${obj[1]}/${obj[0]}`;
+  return novaData;
 };

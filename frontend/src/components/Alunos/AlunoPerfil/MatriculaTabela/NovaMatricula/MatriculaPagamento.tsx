@@ -72,48 +72,6 @@ export function MatriculaPagamento({ form }: TypeMatriculaPagamento) {
           />
         </div>
       </div>
-
-      <div className="mt-4 pb-4">
-        <div className=" flex w-[25em] items-center justify-between">
-          <span className="text-sm font-medium">Proxima Cobrança:</span>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-[240px] pl-3 text-left font-normal",
-                  !date && "text-muted-foreground"
-                )}
-              >
-                {/* {form.getValues("plano_option") === "plano_1" &&
-                  dayjs(getValues("inicio_matricula"))
-                    .add(1, "month")
-                    .format("DD/MM/YYYY")}
-                {getValues("plano_option") === "plano_2" &&
-                  dayjs(getValues("inicio_matricula"))
-                    .add(6, "months")
-                    .format("DD/MM/YYYY")}
-                {getValues("plano_option") === "plano_3" &&
-                  dayjs(getValues("inicio_matricula"))
-                    .add(1, "year")
-                    .format("DD/MM/YYYY")}
-
-                {getValues("plano") === undefined && "Próxima Cobrança"} */}
-
-                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
-      </div>
     </div>
   );
 }

@@ -13,6 +13,11 @@ export const aluno_general_info = async (req: Request, res: Response) => {
     include: {
       academia: true,
       role: true,
+      matricula: {
+        include: {
+          plano: true,
+        },
+      },
     },
   });
 
