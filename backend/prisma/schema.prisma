@@ -135,4 +135,24 @@ model matricula {
 
     inicio DateTime 
     status Boolean
+
+    cobrancas cobranca[]
+}
+
+model cobranca {
+   id          Int      @id @default(autoincrement())
+   data DateTime
+   data_vencimento DateTime
+ 
+   matricula matricula @relation(fields: [matricula_id], references: [id])
+   matricula_id Int 
+
+     status Cobranca_Status @default(ABERTA)
+}
+
+
+enum Cobranca_Status {
+  PAGO
+  ABERTA
+  VENCIDA
 }
