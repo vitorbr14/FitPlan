@@ -4,6 +4,7 @@ import auth from "../src/routes/auth";
 import dashboard from "../src/routes/dashboard";
 import aluno_info from "../src/routes/aluno_info";
 import matricula from "../src/routes/matricula";
+import cobranca from "../src/routes/cobrancas";
 var cors = require("cors");
 import { errorMiddleware } from "./middlewares/error";
 import {
@@ -22,7 +23,8 @@ app.use("/api/auth", auth);
 app.use("/api/dashboard", dashboard);
 app.use("/api/aluno", aluno_info);
 app.use("/api/matricula", matricula);
-app.use(errorMiddleware);
+app.use("/api/cobranca", cobranca);
+// app.use(errorMiddleware);
 
 app.listen(5656, () => {
   console.log("Server is running on port 5656");

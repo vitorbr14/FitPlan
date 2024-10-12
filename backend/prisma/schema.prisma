@@ -146,8 +146,8 @@ model cobranca {
  
    matricula matricula @relation(fields: [matricula_id], references: [id])
    matricula_id Int 
-
-     status Cobranca_Status @default(ABERTA)
+  status Cobranca_Status @default(ABERTA)
+  preco Float
 }
 
 
