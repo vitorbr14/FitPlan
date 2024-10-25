@@ -7,11 +7,11 @@ type User = {
   user: null | string;
 };
 type AuthStore = {
-  currentUser: null | String;
+  currentUser: any;
   checkUser: any;
 };
 
-export const useAuthStore = create<AuthStore>((set) => ({
-  currentUser: null,
-  checkUser: () => set((state: any) => ({ currentUser: "kkk" })),
-}));
+// export const useAuthStore = create<AuthStore>((set) => ({
+//   currentUser: null,
+//   addUser:
+// }));

@@ -5,7 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Cookies from "js-cookie";
-import { useAuthStore } from "@/store/authStore";
+
 import {
   Form,
   FormControl,
@@ -22,24 +22,14 @@ import { auth } from "@/config/firebase";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 const loginSchema = z.object({
   email: z.string({ required_error: "Insira um e-mail válido." }).email(),
   password: z.string({ required_error: "Insira uma senha." }).min(4),
 });
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 export const LoginForm = () => {
-  const { currentUser, checkUser } = useAuthStore();
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        checkUser();
-
-        // ...
-      }
-    });
-  }, []);
-
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -47,6 +37,22 @@ export const LoginForm = () => {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
   });
+
+  async function getUsersInfo(id: string) {
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/aluno/${id}`)
+      .then(function (response) {
+        // manipula o sucesso da requisição
+        console.log(response);
+      })
+      .catch(function (error) {
+        // manipula erros da requisição
+        console.error(error);
+      })
+      .finally(function () {
+        // sempre será executado
+      });
+  }
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     try {
@@ -59,7 +65,7 @@ export const LoginForm = () => {
 
       toast.success("Você será redirecionado...");
       const token = await loggedUser.user.getIdToken();
-      checkUser("usuario logado");
+
       console.log(loggedUser.user);
 
       // navigate("/dashboard/alunos");
@@ -75,7 +81,7 @@ export const LoginForm = () => {
   }
   return (
     <Form {...form}>
-      <Button onClick={() => console.log(currentUser)}>current</Button>
+      <Button onClick={() => console.log("currentUser")}>current</Button>
 
       <Toaster />
       <form className="pt-5" onSubmit={form.handleSubmit(onSubmit)}>
