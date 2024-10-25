@@ -15,114 +15,123 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { NovaCobrança } from "./NovaCobranca/NovaCobrança";
-
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import { Form } from "@/components/ui/form";
 import dayjs from "dayjs";
-
-export type Cobrança = {
-  dataVencimento: string;
-  referencia: string;
-  status: string;
-  valor: number;
-};
-const cobrancas: Cobrança[] = [
-  {
-    dataVencimento: "20",
-    referencia: "Julho",
-    status: "Aberta",
-    valor: 90,
-  },
-  {
-    dataVencimento: "20",
-    referencia: "Junho",
-    status: "Vencida",
-    valor: 90,
-  },
-  {
-    dataVencimento: "20",
-    referencia: "Maio",
-    status: "Paga",
-    valor: 90,
-  },
-  {
-    dataVencimento: "20",
-    referencia: "Abril",
-    status: "Paga",
-    valor: 90,
-  },
-  {
-    dataVencimento: "20",
-    referencia: "Março",
-    status: "Paga",
-    valor: 90,
-  },
-  {
-    dataVencimento: "20",
-    referencia: "Fevereiro",
-    status: "Paga",
-    valor: 90,
-  },
-];
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import { Cobrancas, FetchCobrancaResponse, Matricula } from "@/types/types";
+import axios from "axios";
+import { useState } from "react";
+import AlunoPerfilFinanceiroTable_Skeleton from "./NovaCobranca/AlunoPerfilFinanceiroTable_Skeleton";
 
 export const cobrancaSchema = z.object({
-  plano_option: z.enum(["plano_1", "plano_2", "plano_3"], {
-    required_error: "Escolha uma opção de plano.",
-  }),
   plano_inicio: z.date({
     required_error: "Por favor, coloque o ínicio da cobrança.",
   }),
+  status: z.enum(["PAGO", "ABERTA", "VENCIDA"]),
 });
 
+const getMatriculaFromAluno = async (id: string): Promise<Matricula[]> => {
+  const fetchMatricula = await axios.get(
+    `${import.meta.env.VITE_API_URL}matricula/${id}`
+  );
+
+  return fetchMatricula.data;
+};
+
+const getCobrancasAluno = async (
+  id: string,
+  pageNumber: number
+): Promise<FetchCobrancaResponse> => {
+  const fetchCobranca = await axios.get(
+    `${import.meta.env.VITE_API_URL}cobranca/${id}?skip=${pageNumber}&take=5`
+  );
+
+  return fetchCobranca.data;
+};
+
+type add_nova_matricula_type = {
+  aluno_id: number;
+  academia_id: number;
+  plano_id: number;
+  inicio: any;
+  status: boolean;
+};
+
 export const AlunoPerfilFinanceiroTable = () => {
+  const [page, setPage] = useState(1);
+  const queryClient = useQueryClient();
+  let { id: id_aluno_url } = useParams();
+
+  // Pegar o ID da matricula do aluno para fazer as operações.
+  const { data: matricula_aluno } = useQuery({
+    queryKey: ["matricula", id_aluno_url],
+    queryFn: () => getMatriculaFromAluno(id_aluno_url ?? "id_default"),
+  });
+
   const form = useForm<z.infer<typeof cobrancaSchema>>({
     resolver: zodResolver(cobrancaSchema),
   });
 
-  function onSubmit(data: z.infer<typeof cobrancaSchema>) {
-    if (data.plano_option === "plano_1") {
-      console.log("plano 1");
-      const newObj = {
-        ...data,
-        vencimento: dayjs(form.getValues("plano_inicio"))
-          .add(1, "month")
-          .format(),
-      };
-      console.log(newObj);
-      form.resetField("plano_inicio");
-    }
-    if (data.plano_option === "plano_2") {
-      console.log("plano 1");
-      const newObj = {
-        ...data,
-        vencimento: dayjs(form.getValues("plano_inicio"))
-          .add(6, "month")
-          .format(),
-      };
-      console.log(newObj);
-    }
+  const { mutate: add_nova_cobranca } = useMutation({
+    mutationFn: ({ data_cobrança, status }: any) => {
+      return axios.post(
+        `${import.meta.env.VITE_API_URL}cobranca/${id_aluno_url}`,
+        { data: { data_cobrança, status } }
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cobranças"] });
+      toast.success("Cobrança criada com sucesso!");
+    },
+    onError: () => {
+      toast.error("Algo deu errado, tente novamente mais tarde!");
+    },
+  });
 
-    if (data.plano_option === "plano_3") {
-      console.log("plano 1");
-      const newObj = {
-        ...data,
-        vencimento: dayjs(form.getValues("plano_inicio"))
-          .add(1, "year")
-          .format(),
-      };
-      console.log(newObj);
-    }
+  const { data: cobrancas_aluno, isPending: loading_cobranca } = useQuery({
+    queryKey: ["cobranças", id_aluno_url, page],
+    queryFn: () => getCobrancasAluno(id_aluno_url ?? "id_default", page),
+  });
+
+  function onSubmit(data: z.infer<typeof cobrancaSchema>) {
+    console.log(data);
+    add_nova_cobranca({
+      data_cobrança: data.plano_inicio.toString(),
+      status: data.status,
+    });
+  }
+  function soonerNotification() {
+    toast.error("Aluno sem matrícula!", {
+      description: "Por favor, crie uma matrícula para o aluno primeiro!",
+    });
   }
 
   return (
     <div className="relative">
+      <Toaster richColors={true} />
+
       <Dialog>
-        <DialogTrigger>
-          <BtnTabela label=" Nova Cobrança" />
-        </DialogTrigger>
+        {matricula_aluno?.length === 0 ? (
+          <div onClick={soonerNotification}>
+            <BtnTabela label="Nova Cobrança" />
+          </div>
+        ) : (
+          <DialogTrigger>
+            <BtnTabela label=" Nova Cobrança" />
+          </DialogTrigger>
+        )}
         <DialogContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              <NovaCobrança form={form} />
+              {matricula_aluno && (
+                <NovaCobrança
+                  form={form}
+                  matricula_aluno={matricula_aluno[0]}
+                />
+              )}
 
               <Button type="submit">Nova Cobrança</Button>
             </form>
@@ -143,11 +152,29 @@ export const AlunoPerfilFinanceiroTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {cobrancas.map((cobranca) => {
-            return <AlunoPerfilFinanceiroRow props={cobranca} />;
-          })}
+          {loading_cobranca && <AlunoPerfilFinanceiroTable_Skeleton />}
+          {cobrancas_aluno &&
+            cobrancas_aluno.findAllCobrancas.map((cobranca) => {
+              return <AlunoPerfilFinanceiroRow cobranca={cobranca} />;
+            })}
         </TableBody>
       </Table>
+      <div className=" flex justify-center py-5">
+        <Button
+          variant="outline"
+          onClick={() => setPage((prev) => prev - 1)}
+          disabled={page === 1 && true}
+        >
+          Anterior
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => setPage((prev) => prev + 1)}
+          disabled={page === cobrancas_aluno?.paginas && true}
+        >
+          Próximo
+        </Button>
+      </div>
     </div>
   );
 };

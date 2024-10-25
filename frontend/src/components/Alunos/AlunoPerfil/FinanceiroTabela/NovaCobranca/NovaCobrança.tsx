@@ -28,10 +28,17 @@ import { Input } from "@/components/ui/input";
 import { switchCasePlanos } from "@/utils/switchCasePlanos";
 import { UseFormReturn } from "react-hook-form";
 import { cobrancaSchema } from "../AlunoPerfilFinanceiroTable";
+
+import { Matricula } from "@/types/types";
+import { formatarData } from "@/utils/formatDate";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+
 type TypeNovaCobrança = {
   form: UseFormReturn<z.infer<typeof cobrancaSchema>>;
+  matricula_aluno: Matricula;
 };
-export const NovaCobrança = ({ form }: TypeNovaCobrança) => {
+export const NovaCobrança = ({ form, matricula_aluno }: TypeNovaCobrança) => {
   return (
     <div>
       <div className="flex gap-2 flex-col">
@@ -42,40 +49,9 @@ export const NovaCobrança = ({ form }: TypeNovaCobrança) => {
       <div className="py-5">
         <div className="flex items-center gap-2 ">
           <div className="w-full">
-            <FormField
-              control={form.control}
-              name="plano_option"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="">
-                    <FormLabel>Plano:</FormLabel>
-                    <div className="">
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        value={form.watch("plano_option")}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione o plano" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="teste" disabled>
-                            Selecione um plano...
-                          </SelectItem>
-                          <SelectItem value="plano_1">Mensal - 50$</SelectItem>
-                          <SelectItem value="plano_2">
-                            Semestral - 400$
-                          </SelectItem>
-                          <SelectItem value="plano_3">Anual - 600$</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
+            <Input
+              disabled
+              placeholder={`${matricula_aluno.plano.plano} - ${matricula_aluno.plano.plano_price} R$`}
             />
           </div>
         </div>
@@ -89,7 +65,7 @@ export const NovaCobrança = ({ form }: TypeNovaCobrança) => {
               name="plano_inicio"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Inicio da cobrança:</FormLabel>
+                  <FormLabel>Data da Cobrança:</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -128,16 +104,41 @@ export const NovaCobrança = ({ form }: TypeNovaCobrança) => {
       <div className="pb-4">
         <div className="flex items-center gap-2 ">
           <div className="w-full">
-            <span className="text-sm font-medium">Data vencimento</span>
-            <Input
-              className="opacity-0"
-              disabled
-              value={
-                switchCasePlanos(
-                  dayjs(form.watch("plano_inicio")),
-                  form.getValues("plano_option")
-                ) || "Vencimento"
-              }
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>Status da Cobrança:</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="PAGO" />
+                        </FormControl>
+                        <FormLabel className="font-normal">Paga</FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="ABERTA" defaultChecked />
+                        </FormControl>
+                        <FormLabel className="font-normal">Em Aberto</FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="VENCIDA" />
+                        </FormControl>
+                        <FormLabel className="font-normal">Vencida</FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
         </div>

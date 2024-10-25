@@ -5,6 +5,7 @@ import {
   BadRequestError,
   NotFoundError,
 } from "../errors/api-errors";
+import dayjs from "dayjs";
 
 const prisma = new PrismaClient();
 
@@ -63,7 +64,7 @@ export const getPlanos = async (req: Request, res: Response) => {
 export const getMatriculaAluno = async (req: Request, res: Response) => {
   const { aluno_id } = req.params;
 
-  const get_matricula = await prisma.matricula.findUnique({
+  const get_matricula = await prisma.matricula.findFirst({
     where: {
       aluno_id: Number(aluno_id),
     },

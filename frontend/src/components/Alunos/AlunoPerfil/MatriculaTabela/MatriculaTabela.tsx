@@ -53,7 +53,9 @@ export const MatriculaTabela = () => {
   });
 
   // Função que pega as matriculas da API
-  const getMatriculaFromAluno = async (id: string): Promise<Matricula[]> => {
+  const getMatriculaFromAluno = async (
+    id: string
+  ): Promise<Matricula[] | undefined> => {
     const fetchMatricula = await axios.get(
       `${import.meta.env.VITE_API_URL}matricula/${id}`
     );
@@ -181,32 +183,29 @@ export const MatriculaTabela = () => {
             </TableRow>
           </TableHeader>
 
-          <TableBody>
-            {matricula_aluno.length === 0 ? (
-              <div className="flex justify-center py-10  relative">
-                <span className="text-gray-500">
-                  Aluno não está matrículado.
-                </span>
-              </div>
-            ) : (
-              matricula_aluno.map((matricula) => (
-                <TableRow key={matricula.id}>
-                  <TableCell className="font-medium">Musculação</TableCell>
-                  <TableCell>{formatarData(matricula.inicio)}</TableCell>
-                  <TableCell>{matricula.plano.plano}</TableCell>
-                  <TableCell>
-                    {matricula.status && <Badge>Ativa</Badge>}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {matricula.plano.plano_price} R$
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="secondary">Editar</Button>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
+          {matricula_aluno.length === 0 && (
+            <div className="py-5">
+              <h1>Aluno não está matriculado!</h1>
+            </div>
+          )}
+
+          {matricula_aluno.length > 0 &&
+            matricula_aluno.map((matricula) => (
+              <TableRow key={matricula.id}>
+                <TableCell className="font-medium">Musculação</TableCell>
+                <TableCell>{formatarData(matricula.inicio)}</TableCell>
+                <TableCell>{matricula.plano.plano}</TableCell>
+                <TableCell>
+                  {matricula.status && <Badge>Ativa</Badge>}
+                </TableCell>
+                <TableCell className="text-right">
+                  {matricula.plano.plano_price} R$
+                </TableCell>
+                <TableCell className="text-right">
+                  <Button variant="secondary">Editar</Button>
+                </TableCell>
+              </TableRow>
+            ))}
         </Table>
       </div>
     </>

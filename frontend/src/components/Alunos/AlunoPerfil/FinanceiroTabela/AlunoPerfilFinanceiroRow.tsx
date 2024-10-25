@@ -1,36 +1,60 @@
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Cobrança } from "./AlunoPerfilFinanceiroTable";
-import { Badge } from "@/components/ui/badge";
 
+import { Badge } from "@/components/ui/badge";
+import { Cobrancas } from "@/types/types";
+import { formatarData } from "@/utils/formatDate";
+import { getMonth_and_year } from "@/utils/GetMonthNYear";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { EditarCobrancaDialog } from "./NovaCobranca/EditarCobrancaDialog";
 type TypeAlunoPerfilFinanceiroRow = {
-  props: Cobrança;
+  cobranca: Cobrancas;
 };
 
 export const AlunoPerfilFinanceiroRow = ({
-  props,
+  cobranca,
 }: TypeAlunoPerfilFinanceiroRow) => {
   return (
     <>
-      <TableRow>
-        <TableCell>{props.referencia}/2024</TableCell>
-        <TableCell className="font-medium">{props.dataVencimento} </TableCell>
+      <TableRow key={cobranca.id}>
+        <TableCell>{getMonth_and_year(cobranca.data)} </TableCell>
+        <TableCell className="font-medium">
+          {formatarData(cobranca.data_vencimento)}
+        </TableCell>
 
         <TableCell>
-          {props.status === "Aberta" && (
+          {cobranca.status === "ABERTA" && (
             <Badge variant="secondary">Em Aberto</Badge>
           )}
-          {props.status === "Vencida" && (
+          {cobranca.status === "VENCIDA" && (
             <Badge variant="destructive">Vencida</Badge>
           )}
 
-          {props.status === "Paga" && <Badge variant="default">Paga</Badge>}
+          {cobranca.status === "PAGO" && <Badge variant="default">Paga</Badge>}
         </TableCell>
-        <TableCell className="text-right">R$ {props.valor}</TableCell>
+        <TableCell className="text-right">
+          R$ {cobranca.preco.toString()}
+        </TableCell>
         <TableCell className="text-right ">
-          <Button className="mr-2" variant="outline">
-            Informações
-          </Button>
+          <Dialog>
+            <DialogTrigger>
+              <Button className="mr-2" variant="outline">
+                Informações
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <EditarCobrancaDialog id={cobranca.id} />
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
         </TableCell>
       </TableRow>
     </>

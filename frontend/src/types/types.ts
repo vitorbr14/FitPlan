@@ -106,3 +106,17 @@ export type Matricula = {
   status: boolean;
   plano: Plano;
 };
+
+export type Cobrancas = {
+  id: number;
+  data: string;
+  data_vencimento: string;
+  matricula_id: number;
+  status: "PAGO" | "ABERTA" | "VENCIDA";
+  preco: Number;
+};
+
+export type FetchCobrancaResponse = {
+  findAllCobrancas: Cobrancas[];
+  paginas: number;
+};
