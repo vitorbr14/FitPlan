@@ -125,7 +125,7 @@ export const novaCobranca = async (req: Request, res: Response) => {
         status: data.status,
       },
     });
-    console.log(novaCobranca);
+   
     res.json(novaCobranca);
     return;
   }

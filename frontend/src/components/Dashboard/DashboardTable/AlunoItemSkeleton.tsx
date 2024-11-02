@@ -1,7 +1,7 @@
 import React from "react";
-import { Skeleton } from "../ui/skeleton";
-import { TableCell, TableRow } from "../ui/table";
-import { Button } from "../ui/button";
+import { Skeleton } from "../../ui/skeleton";
+import { TableCell, TableRow } from "../../ui/table";
+import { Button } from "../../ui/button";
 
 export const AlunoItemSkeleton = () => {
   return (

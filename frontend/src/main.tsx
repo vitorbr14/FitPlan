@@ -16,6 +16,7 @@ import {
 import Alunos from "./pages/Alunos";
 import { Formulario } from "./pages/Formulario";
 import { AlunoPerfil } from "./pages/AlunoPerfil";
+import { Professores } from "./pages/Professores";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/alunos/:id",
         element: <AlunoPerfil />,
+      },
+      {
+        path: "/dashboard/professores",
+        element: <Professores />,
       },
     ],
   },

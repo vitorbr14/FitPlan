@@ -75,7 +75,7 @@ export const MatriculaTabela = () => {
   async function onSubmit(values: z.infer<typeof planoSchema>) {
     const novaMatricula = {
       aluno_id: Number(id_aluno_url),
-      academia_id: 1,
+      academia_id: 9, // De novo, o ID da academia tem que ser passado de forma dinamica!
       plano_id: Number(values.plano),
       inicio: values.inicio_matricula,
       status: true,

@@ -61,7 +61,6 @@ export const createUserSchema = z.object({
   email: z.string().email(),
   nome: z.string(),
   role_id: z.number(),
-  academia_id: z.number(),
 });
 
 export const novoUserInfos = z.object({
@@ -118,5 +117,28 @@ export type Cobrancas = {
 
 export type FetchCobrancaResponse = {
   findAllCobrancas: Cobrancas[];
+  paginas: number;
+};
+
+export type ProfessorType = {
+  id: number;
+  nome: string;
+  email: string;
+  role_id: number;
+  academia_id: number;
+};
+
+export type AlunoType = {
+  email: string;
+  id: number;
+  nome: string;
+  role_id: number;
+  academia_id: number;
+  estado_civil_id: number | null; // Pode ser null
+  sexo_id: number | null; // Pode ser null
+};
+
+export type FetchDataResponse = {
+  alunos: ProfessorType[] | AlunoType[];
   paginas: number;
 };

@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import dayjs from "dayjs";
 
+//LInux
+//Windows
 const prisma = new PrismaClient();
 export const createNovaCobranca = async (
   matricula_obj: any,

@@ -65,6 +65,7 @@ export const RegisterForm = () => {
           setAdminInfo(response.data);
         })
         .catch(function (error) {
+          console.log(error)
           novoAdmin.user.delete();
 
           toast("Algo deu errado!", {

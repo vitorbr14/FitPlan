@@ -1,19 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { NovoAlunoForm } from "./NovoAluno/NovoAlunoForm";
+import { NovoAlunoForm } from "../../Alunos/NovoAluno/NovoAlunoForm";
 import { useSearchAluno } from "@/store/searchAlunoStore";
-import { CreateAlunoInfos } from "./NovoAluno/CreateAlunoInfos";
-import { Button } from "../ui/button";
+import { CreateAlunoInfos } from "../../Alunos/NovoAluno/CreateAlunoInfos";
+import { Button } from "../../ui/button";
 
-export const AlunoTableNavbar = ({}) => {
+type AlunoTableNavbarProps = {
+  fetchName: string;
+};
+export const AlunoTableNavbar = ({ fetchName }: AlunoTableNavbarProps) => {
   const [searchInput, setSearchInput] = useState("");
-  const [formIndex, setFormIndex] = useState(1);
-  const [aluno_id, setAluno_id] = useState(0);
+
   const { handleSearch } = useSearchAluno();
+
   return (
     <>
       <div className="bg-blue-600 p-4 rounded-md mb-2  ">
@@ -23,16 +26,13 @@ export const AlunoTableNavbar = ({}) => {
               <Dialog>
                 <DialogTrigger className="flex items-center text-white hover:text-gray-300 transition-all ">
                   <FaPlus className="text-2xl mr-2" />
-                  <span className="md:block hidden">Adicionar Aluno</span>
+                  <span className="md:block hidden">
+                    Adicionar Novo{""}
+                    {fetchName === "alunos" ? "Aluno" : "Professor"}
+                  </span>
                 </DialogTrigger>
                 <DialogContent className="lg:w-5/12 md:w-full w-11/12 rounded-md">
-                  {formIndex === 1 && (
-                    <NovoAlunoForm
-                      setFormIndex={setFormIndex}
-                      setAluno_id={setAluno_id}
-                    />
-                  )}
-                  {formIndex === 2 && <CreateAlunoInfos aluno_id={aluno_id} />}
+                  <NovoAlunoForm fetchName={fetchName} />
                 </DialogContent>
               </Dialog>
             </div>

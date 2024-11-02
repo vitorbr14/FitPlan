@@ -51,7 +51,9 @@ const DashboardNavbarMenu = () => {
                   <Link to={"/dashboard/alunos"}>{option.op1}</Link>
                 </MenubarItem>
                 <MenubarSeparator />
-                <MenubarItem>{option.op2}</MenubarItem>
+                <MenubarItem>
+                <Link to={"/dashboard/professores"}>{option.op2}</Link>
+                </MenubarItem>
                 <MenubarSeparator />
                 <MenubarItem>{option.op3}</MenubarItem>
               </MenubarContent>

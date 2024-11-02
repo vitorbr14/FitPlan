@@ -33,7 +33,7 @@ export const RegisterGym = ({ adminInfo }: RegisterGymProps) => {
 
   function onSubmit(values: z.infer<typeof newGymSchema>) {
     axios
-      .post(`${import.meta.env.VITE_API_URL}/gym`, {
+      .post(`${import.meta.env.VITE_API_URL}auth/gym`, {
         nome_academia: values.nome_academia,
         telefone: values.telefone,
         cnpj: values.cnpj,
@@ -48,6 +48,8 @@ export const RegisterGym = ({ adminInfo }: RegisterGymProps) => {
           description: "Tente novamente mais tarde.",
         });
       });
+
+    console.log(adminInfo.id)
   }
   return (
     <div>

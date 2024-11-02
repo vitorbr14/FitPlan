@@ -1,0 +1,3 @@
+const ojb = {
+    nome:"teste"
+}

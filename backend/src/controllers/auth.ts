@@ -31,7 +31,7 @@ export const createGym = async (req: Request, res: Response) => {
       admin_id,
     },
   });
-  res.json(req.body);
+  res.json(newGym);
 };
 
 export const register = async (req: Request, res: Response) => {
