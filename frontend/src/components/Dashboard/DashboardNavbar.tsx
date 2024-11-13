@@ -3,8 +3,10 @@ import { Container } from "../layout/Container";
 import DashboardUserInfo from "./DashboardUserInfo";
 
 import DashboardNavbarMenu from "./DashboardNavbarMenu";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const DashboardNavbar = () => {
+  const { user } = useAuth();
   return (
     <div className="bg-blue-600 py-5 ">
       <Container>
@@ -16,6 +18,7 @@ export const DashboardNavbar = () => {
             <div className="hidden md:flex">
               <DashboardNavbarMenu />
             </div>
+            <h1 className="text-white">{user?.email}</h1>
           </div>
 
           <div>

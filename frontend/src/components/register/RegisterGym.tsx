@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import {
   Form,
   FormControl,
@@ -15,7 +16,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
-import { TypeAdmin } from "./RegisterForm";
+import { useState } from "react";
+import { LoadingSpinner } from "../ui/loading";
 
 const newGymSchema = z.object({
   nome_academia: z.string().min(6),
@@ -24,35 +26,61 @@ const newGymSchema = z.object({
 });
 
 type RegisterGymProps = {
-  adminInfo: TypeAdmin;
+  admin_id: string;
 };
-export const RegisterGym = ({ adminInfo }: RegisterGymProps) => {
+export const RegisterGym = ({ admin_id }: RegisterGymProps) => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof newGymSchema>>({
     resolver: zodResolver(newGymSchema),
   });
 
+  // Quando o professor é criado no formulario anterior
+  // Ele não está relacionado a nenhuma academia,
+  // Essa função faz isso.
+
+  const updateProfessor = async (professor_id: string, academia_id: string) => {
+    axios
+      .patch(`${import.meta.env.VITE_API_URL}auth/editprofessor`, {
+        professor_id,
+        academia_id,
+      })
+      .then((response) => console.log(response.data))
+      .catch((error) => console.error(error));
+  };
+
   function onSubmit(values: z.infer<typeof newGymSchema>) {
+    setLoading(true);
     axios
       .post(`${import.meta.env.VITE_API_URL}auth/gym`, {
         nome_academia: values.nome_academia,
         telefone: values.telefone,
         cnpj: values.cnpj,
-        admin_id: adminInfo.id,
       })
       .then(function (response) {
-        toast("Academia criada com sucesso!");
+        toast("Academia criada com sucesso!", {
+          description: "Você está sendo redirecionado...",
+        });
+        const gymid = response.data.id;
+        console.log(gymid);
+        updateProfessor(admin_id, gymid);
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
       })
       .catch(function (error) {
         console.error(error);
         toast("Algo deu errado!", {
           description: "Tente novamente mais tarde.",
         });
+      })
+      .finally(() => {
+        setLoading(false);
       });
-
-    console.log(adminInfo.id)
   }
   return (
     <div>
+      <h1>{admin_id}</h1>
       <Toaster />
       <Form {...form}>
         <form className=" " onSubmit={form.handleSubmit(onSubmit)}>
@@ -116,8 +144,8 @@ export const RegisterGym = ({ adminInfo }: RegisterGymProps) => {
             />
           </div>
           <div className="text-center">
-            <Button type="submit" variant="outline">
-              Cadastrar Academia!
+            <Button type="submit" variant="outline" disabled={loading}>
+              {loading ? <LoadingSpinner /> : "Cadastrar Academia!"}
             </Button>
           </div>
         </form>

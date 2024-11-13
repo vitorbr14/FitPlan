@@ -17,14 +17,15 @@ import { Button } from "@/components/ui/button";
 import { planosType } from "@/types/types";
 import { useState } from "react";
 import { NovaMatriculaPlanos_Skeleton } from "./NovaMatriculaPlanos_Skeleton";
-
+import Cookies from "js-cookie";
 type TypePropsNovaMatriculaPlanos = {
   form: UseFormReturn<z.infer<typeof planoSchema>>;
 };
 export const NovaMatriculaPlanos = ({ form }: TypePropsNovaMatriculaPlanos) => {
   const fetchPlanos = async (): Promise<planosType[]> => {
     const fetiching = await axios.get(
-      `${import.meta.env.VITE_API_URL}matricula/planos`
+      `${import.meta.env.VITE_API_URL}aluno/planos`,
+      { headers: { Authorization: `Bearer ${Cookies.get("jwt")}` } }
     );
 
     return fetiching.data;

@@ -24,7 +24,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 const loginSchema = z.object({
-  email: z.string({ required_error: "Insira um e-mail válido." }).email(),
+  email: z.string({ required_error: "Insira um e-mail válido." }),
   password: z.string({ required_error: "Insira uma senha." }).min(4),
 });
 import { useNavigate } from "react-router-dom";
@@ -38,22 +38,6 @@ export const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  async function getUsersInfo(id: string) {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/aluno/${id}`)
-      .then(function (response) {
-        // manipula o sucesso da requisição
-        console.log(response);
-      })
-      .catch(function (error) {
-        // manipula erros da requisição
-        console.error(error);
-      })
-      .finally(function () {
-        // sempre será executado
-      });
-  }
-
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     try {
       setLoading(true);
@@ -63,12 +47,10 @@ export const LoginForm = () => {
         values.password
       );
 
-      toast.success("Você será redirecionado...");
       const token = await loggedUser.user.getIdToken();
-
-      console.log(loggedUser.user);
-
-      // navigate("/dashboard/alunos");
+      console.log(token);
+      Cookies.set("jwt", token);
+      navigate("/dashboard/alunos");
     } catch (error) {
       console.log(error);
       setLoading(false);

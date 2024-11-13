@@ -26,18 +26,19 @@ model Academia {
   professor_id  Professor[]
   aluno_id      aluno[]
   matricula matricula[]
+  
 }
 
 
 model Professor {
-  id        Int      @id @default(autoincrement())
+  id          String     @id
   nome String
   email String
 
   role Role @relation(fields: [role_id], references: [id])
   role_id Int
-   academia Academia @relation(fields: [academia_id], references: [id])
-  academia_id Int
+   academia Academia? @relation(fields: [academia_id], references: [id])
+  academia_id Int?
   
 }
 

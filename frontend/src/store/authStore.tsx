@@ -1,17 +1,21 @@
-import { create } from "zustand";
 import { auth } from "@/config/firebase";
-import { onAuthStateChanged } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { onAuthStateChanged, User } from "firebase/auth";
+import { useEffect } from "react";
+import { create } from "zustand";
 
-type User = {
-  user: null | string;
-};
-type AuthStore = {
-  currentUser: any;
-  checkUser: any;
+type AuthStoreType = {
+  currentUser: User | null;
 };
 
-// export const useAuthStore = create<AuthStore>((set) => ({
-//   currentUser: null,
-//   addUser:
-// }));
+useEffect(() => {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
+}, []);
+export const authStore = create<AuthStoreType>(() => ({
+  currentUser: null,
+}));

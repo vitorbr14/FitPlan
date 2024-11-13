@@ -121,7 +121,7 @@ export type FetchCobrancaResponse = {
 };
 
 export type ProfessorType = {
-  id: number;
+  id: string;
   nome: string;
   email: string;
   role_id: number;
@@ -142,3 +142,28 @@ export type FetchDataResponse = {
   alunos: ProfessorType[] | AlunoType[];
   paginas: number;
 };
+
+export const novo_professor_type = z
+  .object({
+    nome: z.string().min(2, {
+      message: "Nome deve ter pelomenos 4 letras.",
+    }),
+    email: z.string().email().min(5, {
+      message: "Insira um email.",
+    }),
+    password: z.string().min(6).max(50),
+    confirmPassword: z.string().min(6).max(50),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Password dont confirm",
+    path: ["confirmPassword"],
+  });
+
+export const novo_aluno_type = z.object({
+  nome: z.string().min(2, {
+    message: "Nome deve ter pelomenos 4 letras.",
+  }),
+  email: z.string().email().min(5, {
+    message: "Insira um email.",
+  }),
+});

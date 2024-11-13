@@ -47,7 +47,7 @@ export const getCobrancaAluno = async (req: Request, res: Response) => {
     skip: (Number(skip) - 1) * Number(take),
     take: Number(take),
     where: {
-      matricula_id: getMatricula.id,
+      matricula_id: Number(getMatricula.id),
     },
     orderBy: {
       id: "desc",
@@ -59,19 +59,13 @@ export const getCobrancaAluno = async (req: Request, res: Response) => {
   }
   const totalCobrancas = await prisma.cobranca.count({
     where: {
-      matricula_id: getMatricula.id,
+      matricula_id: Number(getMatricula.id),
     },
   });
   const paginas = Math.ceil(totalCobrancas / Number(take));
 
   res.json({ findAllCobrancas, paginas });
 };
-
-enum statusEnum {
-  "PAGO",
-  "VENCIDA",
-  "ABERTA",
-}
 
 type dataType = {
   data_cobrança: Date;
@@ -125,7 +119,7 @@ export const novaCobranca = async (req: Request, res: Response) => {
         status: data.status,
       },
     });
-   
+
     res.json(novaCobranca);
     return;
   }

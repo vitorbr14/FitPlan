@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { BadRequestError } from "../errors/api-errors";
+import { BadRequestError, NotFoundError } from "../errors/api-errors";
 
 const prisma = new PrismaClient();
 
@@ -10,9 +10,19 @@ export const dashboard = async (req: Request, res: Response) => {
 
 export const getAlunos = async (req: Request, res: Response) => {
   const { skip, take, search } = req.query as any;
-
+  const { user_id } = req;
   const totalAlunos = await prisma.aluno.count();
   const paginas = Math.ceil(totalAlunos / Number(take));
+
+  const findGym_id = await prisma.professor.findUnique({
+    where: {
+      id: user_id,
+    },
+  });
+
+  if (!findGym_id) {
+    throw new NotFoundError("Professor não encontrado.");
+  }
 
   if (search) {
     // Requisição para ver quantos records acham:
@@ -38,6 +48,7 @@ export const getAlunos = async (req: Request, res: Response) => {
           contains: search,
           mode: "insensitive",
         },
+        academia_id: Number(findGym_id?.academia_id),
       },
       orderBy: [
         {
@@ -61,6 +72,9 @@ export const getAlunos = async (req: Request, res: Response) => {
     ],
     skip: (Number(skip) - 1) * Number(take),
     take: Number(take),
+    where: {
+      academia_id: Number(findGym_id?.academia_id),
+    },
   });
 
   res.json({
@@ -70,16 +84,24 @@ export const getAlunos = async (req: Request, res: Response) => {
 };
 
 export const newAluno = async (req: Request, res: Response) => {
-  const { email, nome, role_id, academia_id, sexo_id, estado_civil_id } =
-    req.body;
+  const { email, nome, academia_id } = req.body;
+  const { user_id } = req;
+
+  const findGym_id = await prisma.professor.findUnique({
+    where: {
+      id: user_id,
+    },
+  });
+
+  if (!findGym_id) {
+    throw new NotFoundError("Professor não encontrado.");
+  }
   const createAluno = await prisma.aluno.create({
     data: {
       email: email,
       nome: nome,
-      role_id: role_id,
-      academia_id: academia_id,
-      estado_civil_id,
-      sexo_id,
+      role_id: 1,
+      academia_id: Number(findGym_id.academia_id),
     },
   });
 
@@ -97,30 +119,58 @@ type createProfessorType = {
 };
 
 export const createProfessor = async (req: Request, res: Response) => {
-  const { nome, email, role_id, academia_id } = req.body as createProfessorType;
+  const { id, nome, email } = req.body;
+  const { user_id } = req;
+  // if (!id || !nome || !email) {
+  //   throw new BadRequestError("Insira todos os campos, por favor!");
+  // }
 
-  const newProfessor = await prisma.professor.create({
-    data: {
-      nome: nome,
-      email: email,
-      academia_id: academia_id,
-      role_id: role_id,
+  console.log(user_id);
+
+  const findGym_id = await prisma.professor.findUnique({
+    where: {
+      id: user_id,
     },
   });
 
-  if (!newProfessor) {
+  if (!findGym_id) {
+    throw new NotFoundError("Professor não encontrado.");
+  }
+
+  const novoProfessor = await prisma.professor.create({
+    data: {
+      email,
+      id,
+      nome,
+      academia_id: Number(findGym_id?.academia_id),
+      role_id: 3,
+    },
+  });
+
+  if (!novoProfessor) {
     throw new BadRequestError(
-      "Algo deu errado na criação do professor, tente novamente mais tarde!"
+      "Algo deu errado na criação do professor, tente novamente!"
     );
   }
-  res.json(newProfessor);
+
+  res.json({ user_id });
 };
 
 export const getProfessores = async (req: Request, res: Response) => {
   const { skip, take, search } = req.query as any;
-
+  const { user_id } = req;
   const totalProfessores = await prisma.professor.count();
   const paginas = Math.ceil(totalProfessores / Number(take));
+
+  const findGym_id = await prisma.professor.findUnique({
+    where: {
+      id: user_id,
+    },
+  });
+
+  if (!findGym_id) {
+    throw new NotFoundError("Professor não encontrado.");
+  }
 
   if (search) {
     // Requisição para ver quantos records acham:
@@ -145,6 +195,7 @@ export const getProfessores = async (req: Request, res: Response) => {
           contains: search,
           mode: "insensitive",
         },
+        academia_id: Number(findGym_id?.academia_id),
       },
       orderBy: [
         {
@@ -171,6 +222,9 @@ export const getProfessores = async (req: Request, res: Response) => {
     ],
     skip: (Number(skip) - 1) * Number(take),
     take: Number(take),
+    where: {
+      academia_id: Number(findGym_id?.academia_id),
+    },
   });
 
   res.json({

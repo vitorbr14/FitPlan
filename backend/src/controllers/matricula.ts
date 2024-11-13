@@ -6,27 +6,44 @@ import {
   NotFoundError,
 } from "../errors/api-errors";
 import dayjs from "dayjs";
+import { checkGym } from "../utils/checkGym";
 
 const prisma = new PrismaClient();
 
 type novaMatriculaBody = {
-  aluno_id: number;
-  academia_id: number;
+  aluno_id: string;
+
   plano_id: number;
   inicio: string;
   status: boolean;
 };
 export const novaMatricula = async (req: Request, res: Response) => {
-  const { aluno_id, academia_id, plano_id, inicio, status } =
-    req.body as novaMatriculaBody;
+  const { aluno_id, plano_id, inicio, status } = req.body as novaMatriculaBody;
+  const { user_id } = req;
 
-  if (!aluno_id || !academia_id || !plano_id || !inicio || !status) {
+  // const check = await checkGym(user_id, aluno_id);
+  // if (!check) {
+  //   throw new NotFoundError("Aluno não encontrado");
+  // }
+
+  if (!aluno_id || !plano_id || !inicio || !status) {
     throw new BadRequestError("Algo deu errado, tente novamente mais tarde.");
+  }
+
+  console.log(user_id);
+  const findGym_id = await prisma.professor.findUnique({
+    where: {
+      id: user_id,
+    },
+  });
+
+  if (!findGym_id) {
+    throw new NotFoundError("Professor não encontrado.");
   }
 
   const checarSeExisteMatricula = await prisma.matricula.findUnique({
     where: {
-      aluno_id: aluno_id,
+      aluno_id: Number(aluno_id),
     },
   });
 
@@ -38,8 +55,8 @@ export const novaMatricula = async (req: Request, res: Response) => {
 
   const novaMatricula = await prisma.matricula.create({
     data: {
-      aluno_id,
-      academia_id,
+      aluno_id: Number(aluno_id),
+      academia_id: Number(findGym_id.academia_id),
       plano_id,
       inicio: new Date(inicio),
       status,

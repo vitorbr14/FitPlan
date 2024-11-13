@@ -22,6 +22,7 @@ import dayjs from "dayjs";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { Cobrancas, FetchCobrancaResponse, Matricula } from "@/types/types";
+import Cookies from "js-cookie";
 import axios from "axios";
 import { useState } from "react";
 import AlunoPerfilFinanceiroTable_Skeleton from "./NovaCobranca/AlunoPerfilFinanceiroTable_Skeleton";
@@ -35,7 +36,8 @@ export const cobrancaSchema = z.object({
 
 const getMatriculaFromAluno = async (id: string): Promise<Matricula[]> => {
   const fetchMatricula = await axios.get(
-    `${import.meta.env.VITE_API_URL}matricula/${id}`
+    `${import.meta.env.VITE_API_URL}aluno/matricula/${id}`,
+    { headers: { Authorization: `Bearer ${Cookies.get("jwt")}` } }
   );
 
   return fetchMatricula.data;
@@ -46,18 +48,13 @@ const getCobrancasAluno = async (
   pageNumber: number
 ): Promise<FetchCobrancaResponse> => {
   const fetchCobranca = await axios.get(
-    `${import.meta.env.VITE_API_URL}cobranca/${id}?skip=${pageNumber}&take=5`
+    `${
+      import.meta.env.VITE_API_URL
+    }aluno/cobranca/${id}?skip=${pageNumber}&take=5`,
+    { headers: { Authorization: `Bearer ${Cookies.get("jwt")}` } }
   );
 
   return fetchCobranca.data;
-};
-
-type add_nova_matricula_type = {
-  aluno_id: number;
-  academia_id: number;
-  plano_id: number;
-  inicio: any;
-  status: boolean;
 };
 
 export const AlunoPerfilFinanceiroTable = () => {
@@ -65,7 +62,8 @@ export const AlunoPerfilFinanceiroTable = () => {
   const queryClient = useQueryClient();
   let { id: id_aluno_url } = useParams();
 
-  // Pegar o ID da matricula do aluno para fazer as operações.
+  // Pegar o ID da matricula do aluno
+  // Caso o aluno n for matriculado, n mostra o botão de cobrancas.
   const { data: matricula_aluno } = useQuery({
     queryKey: ["matricula", id_aluno_url],
     queryFn: () => getMatriculaFromAluno(id_aluno_url ?? "id_default"),
@@ -78,8 +76,9 @@ export const AlunoPerfilFinanceiroTable = () => {
   const { mutate: add_nova_cobranca } = useMutation({
     mutationFn: ({ data_cobrança, status }: any) => {
       return axios.post(
-        `${import.meta.env.VITE_API_URL}cobranca/${id_aluno_url}`,
-        { data: { data_cobrança, status } }
+        `${import.meta.env.VITE_API_URL}aluno/cobranca/${id_aluno_url}`,
+        { data: { data_cobrança, status } },
+        { headers: { Authorization: `Bearer ${Cookies.get("jwt")}` } }
       );
     },
     onSuccess: () => {

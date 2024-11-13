@@ -35,7 +35,7 @@ import axios from "axios";
 import { LoadingSpinner } from "@/components/ui/loading";
 import { useParams } from "react-router-dom";
 import { Matricula } from "@/types/types";
-
+import Cookies from "js-cookie";
 import { MatriculaTabelaSkeleton } from "./NovaMatricula/MatriculaTabelaSkeleton";
 import { formatarData } from "@/utils/formatDate";
 export const planoSchema = z.object({
@@ -57,7 +57,8 @@ export const MatriculaTabela = () => {
     id: string
   ): Promise<Matricula[] | undefined> => {
     const fetchMatricula = await axios.get(
-      `${import.meta.env.VITE_API_URL}matricula/${id}`
+      `${import.meta.env.VITE_API_URL}aluno/matricula/${id}`,
+      { headers: { Authorization: `Bearer ${Cookies.get("jwt")}` } }
     );
 
     return fetchMatricula.data;
@@ -98,8 +99,9 @@ export const MatriculaTabela = () => {
   } = useMutation({
     mutationFn: (novaMatricula: add_nova_matricula_type) => {
       return axios.post(
-        `${import.meta.env.VITE_API_URL}matricula`,
-        novaMatricula
+        `${import.meta.env.VITE_API_URL}aluno/novaMatricula`,
+        novaMatricula,
+        { headers: { Authorization: `Bearer ${Cookies.get("jwt")}` } }
       );
     },
     onSuccess: () => {

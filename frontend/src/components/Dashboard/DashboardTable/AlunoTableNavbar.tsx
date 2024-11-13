@@ -8,6 +8,7 @@ import { NovoAlunoForm } from "../../Alunos/NovoAluno/NovoAlunoForm";
 import { useSearchAluno } from "@/store/searchAlunoStore";
 import { CreateAlunoInfos } from "../../Alunos/NovoAluno/CreateAlunoInfos";
 import { Button } from "../../ui/button";
+import { Link } from "react-router-dom";
 
 type AlunoTableNavbarProps = {
   fetchName: string;
@@ -22,19 +23,20 @@ export const AlunoTableNavbar = ({ fetchName }: AlunoTableNavbarProps) => {
       <div className="bg-blue-600 p-4 rounded-md mb-2  ">
         <div className="flex justify-between items-center">
           <div className="">
-            <div>
-              <Dialog>
-                <DialogTrigger className="flex items-center text-white hover:text-gray-300 transition-all ">
-                  <FaPlus className="text-2xl mr-2" />
-                  <span className="md:block hidden">
-                    Adicionar Novo{""}
-                    {fetchName === "alunos" ? "Aluno" : "Professor"}
-                  </span>
-                </DialogTrigger>
-                <DialogContent className="lg:w-5/12 md:w-full w-11/12 rounded-md">
-                  <NovoAlunoForm fetchName={fetchName} />
-                </DialogContent>
-              </Dialog>
+            <div className="text-white flex">
+              <FaPlus className="text-2xl mr-2" />
+
+              <Link
+                to={`/dashboard/${
+                  fetchName === "alunos" ? "novoaluno" : "novoprofessor"
+                }`}
+              >
+                {" "}
+                <span className="md:block hidden">
+                  Adicionar Novo{""}
+                  {fetchName === "alunos" ? " Aluno" : " Professor"}
+                </span>{" "}
+              </Link>
             </div>
           </div>
           <div>

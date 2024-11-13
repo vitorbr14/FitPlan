@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { FetchDataResponse } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 import DashboardTable from "./DashboardTable";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useSearchAluno } from "@/store/searchAlunoStore";
+import { AuthContext, useAuth } from "@/contexts/AuthContext";
+import Cookies from "js-cookie";
 
 type tableProps = {
   fetchName: string;
@@ -13,7 +15,7 @@ type tableProps = {
 export const Table = ({ fetchName }: tableProps) => {
   const { search, cleanSearch } = useSearchAluno();
   const [page, setPage] = useState(1);
-
+  const { user } = useAuth();
   useEffect(() => {
     cleanSearch();
   }, []);
@@ -29,7 +31,8 @@ export const Table = ({ fetchName }: tableProps) => {
       const res = await fetch(
         `${
           import.meta.env.VITE_API_URL
-        }dashboard/${fetchOption}?skip=${page}&take=6&search=${search}`
+        }dashboard/${fetchOption}?skip=${page}&take=6&search=${search}`,
+        { headers: { Authorization: `Bearer ${Cookies.get("jwt")}` } }
       );
 
       return res.json();
@@ -38,7 +41,8 @@ export const Table = ({ fetchName }: tableProps) => {
     const res = await fetch(
       `${
         import.meta.env.VITE_API_URL
-      }dashboard/${fetchOption}?skip=${page}&take=6&search=${search}`
+      }dashboard/${fetchOption}?skip=${page}&take=6&search=${search}`,
+      { headers: { Authorization: `Bearer ${Cookies.get("jwt")}` } }
     );
 
     if (!res) {
@@ -49,13 +53,13 @@ export const Table = ({ fetchName }: tableProps) => {
   };
 
   const { data, isPending } = useQuery({
-    // queryKey: [[fetchName], page, search],
     queryKey: [fetchName, page, search],
     queryFn: () => fetchAlunos_Professores(fetchName),
   });
 
   return (
     <div>
+      <Button onClick={() => console.log(data)}>Teste data</Button>
       <AlunoTableNavbar fetchName={fetchName} />
       <DashboardTable data={data?.alunos} isPending={isPending} />
 

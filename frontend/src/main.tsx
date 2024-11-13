@@ -17,6 +17,10 @@ import Alunos from "./pages/Alunos";
 import { Formulario } from "./pages/Formulario";
 import { AlunoPerfil } from "./pages/AlunoPerfil";
 import { Professores } from "./pages/Professores";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { NovoProfessor } from "./pages/NovoProfessor";
+import { NovoAluno } from "./pages/NovoAluno";
 
 const queryClient = new QueryClient();
 
@@ -35,7 +39,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard />,
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "/dashboard/alunos",
@@ -49,12 +57,22 @@ const router = createBrowserRouter([
         path: "/dashboard/professores",
         element: <Professores />,
       },
+      {
+        path: "/dashboard/novoprofessor",
+        element: <NovoProfessor />,
+      },
+      {
+        path: "/dashboard/novoaluno",
+        element: <NovoAluno />,
+      },
     ],
   },
 ]);
 
 createRoot(document.getElementById("root")!).render(
-  <QueryClientProvider client={queryClient}>
-    <RouterProvider router={router} />
-  </QueryClientProvider>
+  <AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  </AuthProvider>
 );

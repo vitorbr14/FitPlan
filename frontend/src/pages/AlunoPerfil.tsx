@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import { LoadingSpinner } from "@/components/ui/loading";
@@ -40,17 +41,24 @@ export const AlunoPerfil = () => {
 
   const getAluno = async (id: number): Promise<Usuario> => {
     const fetching = await axios.get(
-      `${import.meta.env.VITE_API_URL}aluno/${id}/`
+      `${import.meta.env.VITE_API_URL}aluno/alunoinfo/${id}/`,
+      { headers: { Authorization: `Bearer ${Cookies.get("jwt")}` } }
     );
 
     return fetching.data;
   };
 
-  const { data, isPending } = useQuery({
+  const { data, isPending, error } = useQuery({
     queryKey: ["aluno", id],
     queryFn: () => getAluno(Number(id)),
   });
 
+  if (error)
+    return (
+      <div className="w-full">
+        <h1 className="text-lg">Aluno não encontrado</h1>
+      </div>
+    );
   if (isPending) {
     return (
       <div className=" w-full h-screen flex justify-center items-center">
