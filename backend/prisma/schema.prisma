@@ -39,6 +39,8 @@ model Professor {
   role_id Int
    academia Academia? @relation(fields: [academia_id], references: [id])
   academia_id Int?
+
+  treinoaluno treinoaluno[]
   
 }
 
@@ -69,6 +71,8 @@ model aluno {
   endereco endereco?
 
   matricula matricula?
+
+  treinoaluno treinoaluno[]
  
  
 }
@@ -154,4 +158,79 @@ enum Cobranca_Status {
   PAGO
   ABERTA
   VENCIDA
+}
+
+
+model treinoaluno {
+     id          String  @id @default(uuid())
+    aluno aluno @relation(fields: [aluno_id], references: [id])
+    aluno_id Int
+    professor Professor @relation(fields: [professor_id], references: [id])
+    professor_id String
+    frequencia frequenciatreino @relation(fields: [frequencia_id], references: [id])
+    frequencia_id Int
+    exercicios exerciseontreino[]
+    objetivo objetivos @relation(fields: [objetivo_id], references: [id])
+    objetivo_id Int
+    inicio_treino DateTime
+    vencimento_treino DateTime?
+}
+
+
+model exerciseontreino {
+   id          String  @id @default(uuid())
+   treino treinoaluno @relation(fields: [treino_id], references: [id])
+   treino_id String
+   calendariotreino calendariotreino @relation(fields: [dia_id], references: [id])
+   dia_id Int
+   sets sets @relation(fields: [set_id], references: [id])
+   set_id Int
+   exercise exercicio @relation(fields: [exercise_id], references: [id])
+   exercise_id Int
+}
+
+
+
+
+model exercicio {
+   id          Int      @id @default(autoincrement())
+   nome_exercicio String 
+   grupomuscular grupomuscular @relation(fields: [grupo_muscular], references: [id])
+   grupo_muscular Int
+   exercicioontreino exerciseontreino[]
+}
+
+
+
+model grupomuscular {
+   id          Int      @id @default(autoincrement())
+   nome_grupo String
+   exercicio exercicio[]
+}
+
+
+model frequenciatreino {
+   id          Int      @id @default(autoincrement())
+   frequencia String
+   
+  treinoaluno treinoaluno[]
+}
+
+
+model calendariotreino {
+     id          Int      @id @default(autoincrement())
+     dia String
+     exercicio exerciseontreino[]
+}
+
+model sets {
+     id          Int      @id @default(autoincrement())
+     sets String
+     exercicio exerciseontreino[]
+}
+
+model objetivos {
+   id          Int      @id @default(autoincrement())
+   objetivo String
+   treino treinoaluno[]
 }

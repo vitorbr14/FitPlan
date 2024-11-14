@@ -3,7 +3,7 @@ import express, { NextFunction, Request, Response } from "express";
 import auth from "../src/routes/auth";
 import dashboard from "../src/routes/dashboard";
 import aluno_info from "../src/routes/aluno_info";
-
+import createTreino from "../src/routes/createTreino";
 var cors = require("cors");
 import { errorMiddleware } from "./middlewares/error";
 import {
@@ -23,6 +23,7 @@ app.use("/api/dashboard", authMiddleware, dashboard);
 
 app.use("/api/aluno", authMiddleware, aluno_info);
 
+app.use("/api/treino", createTreino);
 // app.use(errorMiddleware);
 
 app.listen(5656, () => {
