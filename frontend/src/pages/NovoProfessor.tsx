@@ -80,8 +80,6 @@ export const NovoProfessor = () => {
   }
   return (
     <div className="flex justify-center ">
-      <Toaster richColors />
-
       <div className="w-4/12 shadow-[0_3px_10px_rgb(0,0,0,0.2)] px-4 py-4 bg-slate-50">
         <div>
           <h1 className="text-xl font-semibold">Novo Professor</h1>

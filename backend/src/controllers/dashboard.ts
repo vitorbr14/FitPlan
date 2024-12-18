@@ -12,7 +12,6 @@ export const getAlunos = async (req: Request, res: Response) => {
   const { skip, take, search } = req.query as any;
   const { user_id } = req;
   const totalAlunos = await prisma.aluno.count();
-  const paginas = Math.ceil(totalAlunos / Number(take));
 
   const findGym_id = await prisma.professor.findUnique({
     where: {
@@ -26,13 +25,13 @@ export const getAlunos = async (req: Request, res: Response) => {
 
   if (search) {
     // Requisição para ver quantos records acham:
-
     const alunosCount = await prisma.aluno.findMany({
       where: {
         nome: {
           contains: search,
           mode: "insensitive",
         },
+        academia_id: Number(findGym_id.academia_id),
       },
       orderBy: [
         {
@@ -64,18 +63,38 @@ export const getAlunos = async (req: Request, res: Response) => {
 
     return res.json({ alunos, paginas });
   }
+
+  // Sem search
+  const alunosCount = await prisma.aluno.findMany({
+    where: {
+      nome: {
+        contains: search,
+        mode: "insensitive",
+      },
+      academia_id: Number(findGym_id.academia_id),
+    },
+    orderBy: [
+      {
+        id: "asc",
+      },
+    ],
+  });
+
   const alunos = await prisma.aluno.findMany({
+    where: {
+      academia_id: Number(findGym_id?.academia_id),
+    },
     orderBy: [
       {
         nome: "asc",
       },
     ],
+
     skip: (Number(skip) - 1) * Number(take),
     take: Number(take),
-    where: {
-      academia_id: Number(findGym_id?.academia_id),
-    },
   });
+
+  const paginas = Math.ceil(alunosCount.length / Number(take));
 
   res.json({
     alunos,
@@ -124,8 +143,6 @@ export const createProfessor = async (req: Request, res: Response) => {
   // if (!id || !nome || !email) {
   //   throw new BadRequestError("Insira todos os campos, por favor!");
   // }
-
-  console.log(user_id);
 
   const findGym_id = await prisma.professor.findUnique({
     where: {

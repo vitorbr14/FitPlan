@@ -122,8 +122,6 @@ export const MatriculaTabela = () => {
 
   return (
     <>
-      <Toaster richColors />
-
       <div className="relative">
         <Dialog>
           <DialogTrigger>
@@ -131,7 +129,7 @@ export const MatriculaTabela = () => {
           </DialogTrigger>
           <DialogContent className="">
             <DialogHeader>
-              <DialogTitle>Adicionar nova matrícula.</DialogTitle>
+              <DialogTitle>Criar nova matrícula.</DialogTitle>
             </DialogHeader>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -184,12 +182,6 @@ export const MatriculaTabela = () => {
               <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
-
-          {matricula_aluno.length === 0 && (
-            <div className="py-5">
-              <h1>Aluno não está matriculado!</h1>
-            </div>
-          )}
 
           {matricula_aluno.length > 0 &&
             matricula_aluno.map((matricula) => (

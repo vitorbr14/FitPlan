@@ -21,6 +21,8 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { NovoProfessor } from "./pages/NovoProfessor";
 import { NovoAluno } from "./pages/NovoAluno";
+import { Teste } from "./pages/Teste";
+import { Toaster } from "sonner";
 
 const queryClient = new QueryClient();
 
@@ -65,6 +67,10 @@ const router = createBrowserRouter([
         path: "/dashboard/novoaluno",
         element: <NovoAluno />,
       },
+      {
+        path: "/dashboard/teste",
+        element: <Teste />,
+      },
     ],
   },
 ]);
@@ -72,6 +78,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <AuthProvider>
     <QueryClientProvider client={queryClient}>
+      <Toaster richColors />
       <RouterProvider router={router} />
     </QueryClientProvider>
   </AuthProvider>

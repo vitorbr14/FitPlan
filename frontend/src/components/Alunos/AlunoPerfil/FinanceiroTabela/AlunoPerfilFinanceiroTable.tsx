@@ -26,6 +26,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useState } from "react";
 import AlunoPerfilFinanceiroTable_Skeleton from "./NovaCobranca/AlunoPerfilFinanceiroTable_Skeleton";
+import useCheckMatricula from "@/components/hooks/useCheckMatricula";
 
 export const cobrancaSchema = z.object({
   plano_inicio: z.date({
@@ -33,15 +34,6 @@ export const cobrancaSchema = z.object({
   }),
   status: z.enum(["PAGO", "ABERTA", "VENCIDA"]),
 });
-
-const getMatriculaFromAluno = async (id: string): Promise<Matricula[]> => {
-  const fetchMatricula = await axios.get(
-    `${import.meta.env.VITE_API_URL}aluno/matricula/${id}`,
-    { headers: { Authorization: `Bearer ${Cookies.get("jwt")}` } }
-  );
-
-  return fetchMatricula.data;
-};
 
 const getCobrancasAluno = async (
   id: string,
@@ -61,13 +53,12 @@ export const AlunoPerfilFinanceiroTable = () => {
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
   let { id: id_aluno_url } = useParams();
+  const { notMatriculado, toastMatricula, matricula_aluno } = useCheckMatricula(
+    id_aluno_url || ""
+  );
 
   // Pegar o ID da matricula do aluno
   // Caso o aluno n for matriculado, n mostra o botão de cobrancas.
-  const { data: matricula_aluno } = useQuery({
-    queryKey: ["matricula", id_aluno_url],
-    queryFn: () => getMatriculaFromAluno(id_aluno_url ?? "id_default"),
-  });
 
   const form = useForm<z.infer<typeof cobrancaSchema>>({
     resolver: zodResolver(cobrancaSchema),
@@ -102,24 +93,17 @@ export const AlunoPerfilFinanceiroTable = () => {
       status: data.status,
     });
   }
-  function soonerNotification() {
-    toast.error("Aluno sem matrícula!", {
-      description: "Por favor, crie uma matrícula para o aluno primeiro!",
-    });
-  }
 
   return (
     <div className="relative">
-      <Toaster richColors={true} />
-
       <Dialog>
-        {matricula_aluno?.length === 0 ? (
-          <div onClick={soonerNotification}>
+        {notMatriculado ? (
+          <div onClick={toastMatricula}>
             <BtnTabela label="Nova Cobrança" />
           </div>
         ) : (
           <DialogTrigger>
-            <BtnTabela label=" Nova Cobrança" />
+            <BtnTabela label="Nova Cobrança" />
           </DialogTrigger>
         )}
         <DialogContent>
@@ -137,27 +121,32 @@ export const AlunoPerfilFinanceiroTable = () => {
           </Form>
         </DialogContent>
       </Dialog>
-      <Table>
-        <TableCaption>Todas as cobranças do John Doe.</TableCaption>
-        <TableHeader>
-          <TableRow className="bg-gray-100">
-            <TableHead>Referencia</TableHead>
-            <TableHead className="w-[250px]">Dia Vencimento</TableHead>
+      {notMatriculado ? (
+        <h1>Aluno não está matriculado.</h1>
+      ) : (
+        <Table>
+          <TableCaption>Todas as cobranças do John Doe.</TableCaption>
+          <TableHeader>
+            <TableRow className="bg-gray-100">
+              <TableHead>Referencia</TableHead>
+              <TableHead className="w-[250px]">Dia Vencimento</TableHead>
 
-            <TableHead>Status</TableHead>
+              <TableHead>Status</TableHead>
 
-            <TableHead className="text-right">Valor</TableHead>
-            <TableHead className="text-right">Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {loading_cobranca && <AlunoPerfilFinanceiroTable_Skeleton />}
-          {cobrancas_aluno &&
-            cobrancas_aluno.findAllCobrancas.map((cobranca) => {
-              return <AlunoPerfilFinanceiroRow cobranca={cobranca} />;
-            })}
-        </TableBody>
-      </Table>
+              <TableHead className="text-right">Valor</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {loading_cobranca && <AlunoPerfilFinanceiroTable_Skeleton />}
+            {cobrancas_aluno &&
+              cobrancas_aluno.findAllCobrancas.map((cobranca) => {
+                return <AlunoPerfilFinanceiroRow cobranca={cobranca} />;
+              })}
+          </TableBody>
+        </Table>
+      )}
+
       <div className=" flex justify-center py-5">
         <Button
           variant="outline"

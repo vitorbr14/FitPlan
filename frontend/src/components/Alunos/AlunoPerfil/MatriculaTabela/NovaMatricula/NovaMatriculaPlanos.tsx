@@ -49,20 +49,27 @@ export const NovaMatriculaPlanos = ({ form }: TypePropsNovaMatriculaPlanos) => {
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className="flex justify-between"
+                className="grid grid-cols-12"
                 value={form.watch("plano")}
               >
+                {/* 
+grid grid-cols-12 ">
+<div className=" md:col-span-8 col-span-12"> */}
+
                 {data?.map((plano) => {
                   return (
-                    <div className=" items-center space-x-2" key={plano.id}>
-                      <div className="border w-44 h-24 rounded-sm  checked:bg-yellow-300 ">
+                    <div
+                      className=" items-center space-x-2 col-span-4 bg-gray-50"
+                      key={plano.id}
+                    >
+                      <div className="border   h-24 rounded-sm  checked:bg-yellow-300 ">
                         <div className=" p-3">
                           <div className="flex justify-between items-center ">
                             <div className="flex flex-col">
                               <span className="text-sm">{plano.plano}</span>
-                              <span className="text-xs text-gray-500 italic">
-                                Pagamento {plano.plano}
-                              </span>
+                              {/* <span className="text-xs text-gray-500 italic">
+                                {plano.plano}
+                              </span> */}
                             </div>
                             <div>
                               <FormItem>

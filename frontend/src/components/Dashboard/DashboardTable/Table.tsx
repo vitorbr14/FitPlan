@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { useSearchAluno } from "@/store/searchAlunoStore";
 import { AuthContext, useAuth } from "@/contexts/AuthContext";
 import Cookies from "js-cookie";
+import { auth } from "@/config/firebase";
 
 type tableProps = {
   fetchName: string;
@@ -45,21 +46,17 @@ export const Table = ({ fetchName }: tableProps) => {
       { headers: { Authorization: `Bearer ${Cookies.get("jwt")}` } }
     );
 
-    if (!res) {
-      throw new Error("resposta não encontrada");
-    }
-
     return res.json();
   };
 
-  const { data, isPending } = useQuery({
+  const { data, isPending, error } = useQuery({
     queryKey: [fetchName, page, search],
     queryFn: () => fetchAlunos_Professores(fetchName),
   });
+  if (error) return <h1>Algo deu errado, tente novamente!</h1>;
 
   return (
     <div>
-      <Button onClick={() => console.log(data)}>Teste data</Button>
       <AlunoTableNavbar fetchName={fetchName} />
       <DashboardTable data={data?.alunos} isPending={isPending} />
 

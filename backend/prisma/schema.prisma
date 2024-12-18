@@ -170,9 +170,9 @@ model treinoaluno {
     frequencia frequenciatreino @relation(fields: [frequencia_id], references: [id])
     frequencia_id Int
     exercicios exerciseontreino[]
-    objetivo objetivos @relation(fields: [objetivo_id], references: [id])
-    objetivo_id Int
-    inicio_treino DateTime
+    objetivo objetivos? @relation(fields: [objetivo_id], references: [id])
+    objetivo_id Int?
+    inicio_treino DateTime?
     vencimento_treino DateTime?
 }
 

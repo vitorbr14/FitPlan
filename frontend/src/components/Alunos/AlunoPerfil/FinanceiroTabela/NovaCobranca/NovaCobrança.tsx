@@ -33,7 +33,14 @@ import { Matricula } from "@/types/types";
 import { formatarData } from "@/utils/formatDate";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 type TypeNovaCobrança = {
   form: UseFormReturn<z.infer<typeof cobrancaSchema>>;
   matricula_aluno: Matricula;

@@ -88,7 +88,6 @@ export const RegisterForm = () => {
 
   return (
     <>
-      <Toaster />
       {currentIndex === 1 && (
         <Form {...form}>
           <form

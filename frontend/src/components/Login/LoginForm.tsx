@@ -48,7 +48,9 @@ export const LoginForm = () => {
       );
 
       const token = await loggedUser.user.getIdToken();
+      const token2 = await auth.currentUser?.refreshToken;
       console.log(token);
+
       Cookies.set("jwt", token);
       navigate("/dashboard/alunos");
     } catch (error) {
@@ -65,7 +67,6 @@ export const LoginForm = () => {
     <Form {...form}>
       <Button onClick={() => console.log("currentUser")}>current</Button>
 
-      <Toaster />
       <form className="pt-5" onSubmit={form.handleSubmit(onSubmit)}>
         <div className="mb-2">
           <FormField

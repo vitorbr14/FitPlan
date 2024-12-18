@@ -13,27 +13,18 @@ const DashboardNavbarMenu = () => {
     label: string;
     op1: string;
     op2: string;
-    op3: string;
   };
 
   const menuOptions: TypemenuOptions[] = [
     {
       label: "Alunos",
-      op1: "Cadastrar Aluno",
-      op2: "Todos Alunos",
-      op3: "Procurar Aluno",
+      op1: "Todos Alunos",
+      op2: "Cadastrar Aluno",
     },
     {
       label: "Professores",
-      op1: "Cadastrar Professor",
-      op2: "Todos Professores",
-      op3: "Procurar Professor",
-    },
-    {
-      label: "Treinos",
-      op1: "Cadastrar Professor",
-      op2: "Todos Professores",
-      op3: "Procurar Professor",
+      op1: "Todos Professor",
+      op2: "Cadastrar Professor",
     },
   ];
 
@@ -48,14 +39,25 @@ const DashboardNavbarMenu = () => {
               </MenubarTrigger>
               <MenubarContent className=" mt-2">
                 <MenubarItem>
-                  <Link to={"/dashboard/alunos"}>{option.op1}</Link>
+                  <Link
+                    to={`/dashboard/${
+                      option.label === "Alunos" ? "alunos" : "professores"
+                    }`}
+                  >
+                    {option.op1}
+                  </Link>
                 </MenubarItem>
                 <MenubarSeparator />
                 <MenubarItem>
-                <Link to={"/dashboard/professores"}>{option.op2}</Link>
+                  <Link
+                    to={`/dashboard/${
+                      option.label === "Alunos" ? "novoaluno" : "novoprofessor"
+                    }`}
+                  >
+                    {option.op2}
+                  </Link>
                 </MenubarItem>
                 <MenubarSeparator />
-                <MenubarItem>{option.op3}</MenubarItem>
               </MenubarContent>
             </MenubarMenu>
           </Menubar>

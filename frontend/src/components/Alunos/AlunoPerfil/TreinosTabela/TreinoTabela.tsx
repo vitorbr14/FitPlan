@@ -20,59 +20,67 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { NovoTreino } from "./NovoTreino/NovoTreino";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useParams } from "react-router-dom";
+import { formatarData } from "@/utils/formatDate";
+import { SingleTreino } from "./VerTreinos/SingleTreino";
+import useCheckMatricula from "@/components/hooks/useCheckMatricula";
+import { Toaster } from "@/components/ui/sonner";
+type Objetivo = {
+  id: number;
+  objetivo: string;
+};
 
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
+type Frequencia = {
+  id: number;
+  frequencia: string;
+};
+
+type Treino = {
+  id: string;
+  aluno_id: number;
+  professor_id: string;
+  frequencia_id: number;
+  objetivo_id: number;
+  inicio_treino: string; // ISO 8601 date string
+  vencimento_treino: string | null; // nullable ISO 8601 date string
+  objetivo: Objetivo;
+  frequencia: Frequencia;
+};
+
+type Treinos = Treino[];
 
 export const TreinoTabela = () => {
+  let { id: id_aluno_url } = useParams();
+
+  const { notMatriculado, toastMatricula } = useCheckMatricula(
+    id_aluno_url || ""
+  );
+
+  const { data } = useQuery<Treinos>({
+    queryKey: ["treinos", id_aluno_url],
+    queryFn: () =>
+      fetch(`${import.meta.env.VITE_API_URL}treino/${id_aluno_url}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("jwt")}`,
+        },
+      }).then((res) => res.json()),
+  });
+
   return (
     <div className="relative">
       <Dialog>
-        <DialogTrigger>
-          <BtnTabela label=" Novo Treino" />
-        </DialogTrigger>
+        {notMatriculado ? (
+          <div onClick={toastMatricula}>
+            <BtnTabela label=" Novo Treino" />
+          </div>
+        ) : (
+          <DialogTrigger>
+            <BtnTabela label=" Novo Treino" />
+          </DialogTrigger>
+        )}
 
         <DialogContent className="max-w-4xl">
           <NovoTreino />
@@ -84,41 +92,50 @@ export const TreinoTabela = () => {
           <TableRow>
             <TableHead className="">Ficha</TableHead>
             <TableHead>Objetivo</TableHead>
-            <TableHead>Professor</TableHead>
+
             <TableHead className="text-right">Inicio</TableHead>
             <TableHead className="text-right">Validade</TableHead>
-            <TableHead className="text-right">Status</TableHead>
+
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="font-medium">Ficha #1</TableCell>
-            <TableCell>Hipertrofia</TableCell>
-            <TableCell>Fulano</TableCell>
-            <TableCell className="text-right">01.08.2024</TableCell>
-            <TableCell className="text-right">01.10.2024</TableCell>
-            <TableCell className="text-right">
-              <Badge>Ativo</Badge>
-            </TableCell>
-            <TableCell className="text-right">
-              <Button>Editar</Button>
-            </TableCell>
-          </TableRow>
+          {data &&
+            data.map((treino: Treino, index: number) => {
+              return (
+                <TableRow>
+                  <TableCell className="font-medium">
+                    Ficha #{index + 1}
+                  </TableCell>
+                  <TableCell>{treino.objetivo.objetivo}</TableCell>
 
-          <TableRow className="bg-red-100">
-            <TableCell className="font-medium">Ficha #2</TableCell>
-            <TableCell>Hipertrofia</TableCell>
-            <TableCell>Ciclano</TableCell>
-            <TableCell className="text-right">24.04.2024</TableCell>
-            <TableCell className="text-right">24.07.2024</TableCell>
-            <TableCell className="text-right">
-              <Badge variant="destructive">Inativo</Badge>
-            </TableCell>
-            <TableCell className="text-right">
-              <Button>Editar</Button>
-            </TableCell>
-          </TableRow>
+                  <TableCell className="text-right">
+                    {formatarData(treino.inicio_treino)}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {" "}
+                    {treino.vencimento_treino
+                      ? formatarData(treino.vencimento_treino)
+                      : "Sem validade"}
+                  </TableCell>
+
+                  <TableCell className="text-right">
+                    <Dialog>
+                      <DialogTrigger>
+                        <Button>Editar</Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Ficha de Treino</DialogTitle>
+                        </DialogHeader>
+
+                        <SingleTreino id={treino.id} />
+                      </DialogContent>
+                    </Dialog>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
         </TableBody>
       </Table>
     </div>

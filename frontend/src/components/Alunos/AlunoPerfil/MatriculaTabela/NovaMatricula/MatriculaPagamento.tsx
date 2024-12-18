@@ -25,8 +25,6 @@ type TypeMatriculaPagamento = {
   form: UseFormReturn<z.infer<typeof planoSchema>>;
 };
 export function MatriculaPagamento({ form }: TypeMatriculaPagamento) {
-  const [date, setDate] = React.useState<Date>();
-
   return (
     <div>
       <div>

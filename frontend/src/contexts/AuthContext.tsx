@@ -1,6 +1,7 @@
 // src/AuthContext.tsx
 import { auth } from "@/config/firebase";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged, onIdTokenChanged, User } from "firebase/auth";
+import Cookies from "js-cookie";
 import React, {
   createContext,
   useContext,
@@ -33,6 +34,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         setUserLoading(false);
       } else {
         setUserLoading(false);
+      }
+    });
+
+    onIdTokenChanged(auth, (user) => {
+      if (user) {
+        user
+          .getIdToken()
+          .then((token) => {
+            Cookies.set("jwt", token); // Salva o token no cookie
+          })
+          .catch((error) => {
+            console.error("Error fetching token:", error);
+          });
+      } else {
+        Cookies.remove("jwt"); // Remove o token se o usuário não estiver logado
       }
     });
   }, []);

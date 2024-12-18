@@ -167,3 +167,67 @@ export const novo_aluno_type = z.object({
     message: "Insira um email.",
   }),
 });
+
+type GetInfosTreino = {
+  id: string;
+  aluno_id: number;
+  professor_id: string;
+  frequencia_id: number;
+  objetivo_id: number;
+  inicio_treino: string;
+  vencimento_treino: string | null;
+  professor: {
+    id: string;
+    nome: string;
+    email: string;
+    role_id: number;
+    academia_id: number;
+  };
+  frequencia: {
+    id: number;
+    frequencia: string;
+  };
+  objetivo: {
+    id: number;
+    objetivo: string;
+  };
+  aluno: {
+    email: string;
+    id: number;
+    nome: string;
+    role_id: number;
+    academia_id: number;
+    estado_civil_id: number | null;
+    sexo_id: number | null;
+  };
+};
+
+export type Exercise = {
+  id: string;
+  treino_id: string;
+  dia_id: number;
+  set_id: number;
+  exercise_id: number;
+  exercise: {
+    id: number;
+    nome_exercicio: string;
+    grupo_muscular: number;
+    grupomuscular: {
+      id: number;
+      nome_grupo: string;
+    };
+  };
+  sets: {
+    id: number;
+    sets: string;
+  };
+  calendariotreino: {
+    id: number;
+    dia: string;
+  };
+};
+
+export type SingleExerciseType = {
+  getInfosTreino: GetInfosTreino;
+  findExercises: Exercise[];
+};
