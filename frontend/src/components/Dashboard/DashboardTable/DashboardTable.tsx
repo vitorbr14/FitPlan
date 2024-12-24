@@ -41,7 +41,7 @@ const DashboardTable = ({ data, isPending }: dataTable) => {
             <TableHead className="">
               <TableHead className="">Nome</TableHead>
             </TableHead>
-            <TableHead className="">Tel</TableHead>
+            <TableHead className="md:block hidden">E-mail</TableHead>
             <TableHead className="">Ações</TableHead>
           </TableRow>
         </TableHeader>

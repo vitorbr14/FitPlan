@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+.landingWrapper h1,
+.landingWrapper h2,
+.landingWrapper h3,
+.landingWrapper h4,
+.landingWrapper h5,
+.landingWrapper p,
+.landingWrapper span {
+  font-family: "Inter", serif;
+  font-optical-sizing: auto;
+
+  font-style: normal;
+}
+
+.bg_pattern {
+  position: relative;
+  z-index: 1;
+}
+
+.bg_pattern::before {
+  position: absolute;
+  content: "";
+  background-color: #f5f5f5;
+  opacity: 0.3;
+  background-color: #f5f5f5;
+  opacity: 0.2;
+  background-color: #f5f5f5;
+  opacity: 0.2;
+  background-image: linear-gradient(
+      #dedede 3.3000000000000003px,
+      transparent 3.3000000000000003px
+    ),
+    linear-gradient(
+      to right,
+      #dedede 3.3000000000000003px,
+      #f5f5f5 3.3000000000000003px
+    );
+  background-size: 66px 66px;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+.bg_hero {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.cta_landing {
+  position: relative;
+  background-image: url("../src//assets/cta_bg.jpg");
+  background-size: cover;
+  background-position-y: center;
+  background-attachment: fixed;
+  z-index: 1;
+}
+
+.cta_landing::before {
+  z-index: -10;
+  content: "";
+  background-color: #012383;
+  opacity: 0.9;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  position: absolute;
+}

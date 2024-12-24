@@ -9,26 +9,28 @@ import { Button } from "@/components/ui/button";
 
 export const AlunoPerfilNavbar = () => {
   return (
-    <>
-      <Tabs defaultValue="info">
-        <TabsList className="">
-          <TabsTrigger value="info" className="">
-            Informações
-          </TabsTrigger>
-          <TabsTrigger value="financeiro" className="">
-            Financeiro
-          </TabsTrigger>
-          <TabsTrigger value="matricula" className="">
-            Matricula
-          </TabsTrigger>
-          <TabsTrigger value="treinos" className="">
-            Treinos
-          </TabsTrigger>
-        </TabsList>
+    <div>
+      <Tabs defaultValue="info" className="flex flex-col">
+        <div className="relative rounded-sm overflow-x-scroll h-10 bg-muted">
+          <TabsList className="absolute flex flex-row justify-stretch w-full">
+            {/* <TabsTrigger value="info" className="w-full">
+              Informações
+            </TabsTrigger> */}
+            <TabsTrigger value="financeiro" className="w-full">
+              Financeiro
+            </TabsTrigger>
+            <TabsTrigger value="matricula" className="w-full">
+              Matricula
+            </TabsTrigger>
+            <TabsTrigger value="treinos" className="w-full">
+              Treinos
+            </TabsTrigger>
+          </TabsList>
+        </div>
         <TabsContent value="info">
-          <AlunoPefilWrapper title="Informações do Aluno">
+          {/* <AlunoPefilWrapper title="Informações do Aluno">
             <AlunoInfos />
-          </AlunoPefilWrapper>
+          </AlunoPefilWrapper> */}
         </TabsContent>
         <TabsContent value="financeiro">
           <AlunoPefilWrapper title="Financeiro">
@@ -46,6 +48,6 @@ export const AlunoPerfilNavbar = () => {
           </AlunoPefilWrapper>
         </TabsContent>
       </Tabs>
-    </>
+    </div>
   );
 };

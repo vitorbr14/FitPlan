@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { LoadingSpinner } from "@/components/ui/loading";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import { novo_aluno_type } from "@/types/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -48,8 +48,9 @@ export const NovoAluno = () => {
   }
 
   return (
-    <div className="flex justify-center ">
-      <div className="w-4/12 shadow-[0_3px_10px_rgb(0,0,0,0.2)] px-4 py-4 bg-slate-50">
+    <div className="md:flex md:justify-center px-5 ">
+      <Link to="/dashboard/alunos">Voltar</Link>
+      <div className="shadow-[0_3px_10px_rgb(0,0,0,0.2)] px-4 py-4 bg-slate-50 md:w-6/12 ">
         <div>
           <h1 className="text-xl font-semibold">Novo Aluno</h1>
 

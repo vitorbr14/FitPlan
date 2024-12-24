@@ -23,7 +23,20 @@ import { NovoProfessor } from "./pages/NovoProfessor";
 import { NovoAluno } from "./pages/NovoAluno";
 import { Teste } from "./pages/Teste";
 import { Toaster } from "sonner";
-
+import { Landing } from "./pages/Landing";
+import { BreakPointIndicator } from "./components/Landing/BreakPointIndicator";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Button } from "./components/ui/button";
+import SideMenu from "./components/layout/SideMenu";
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
@@ -33,7 +46,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <h1>Home</h1>,
+    element: <Landing />,
   },
   {
     path: "/login",
@@ -77,6 +90,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <AuthProvider>
+    <BreakPointIndicator />
+    {/* <SideMenu /> */}
     <QueryClientProvider client={queryClient}>
       <Toaster richColors />
       <RouterProvider router={router} />

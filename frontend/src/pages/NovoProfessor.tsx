@@ -21,14 +21,13 @@ import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { LoadingSpinner } from "@/components/ui/loading";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import { novo_professor_type } from "@/types/types";
 
 export const NovoProfessor = () => {
   const [formIndex, setFormIndex] = useState(1);
   const [loading, setLoading] = useState(false);
-  const { user: usuario } = useAuth();
 
   const form = useForm<z.infer<typeof novo_professor_type>>({
     resolver: zodResolver(novo_professor_type),
@@ -38,19 +37,23 @@ export const NovoProfessor = () => {
     try {
       // Criar o usuário no Firebase
       setLoading(true);
-      const userCredential = await createUserWithEmailAndPassword(
+      const newProfessor = await createUserWithEmailAndPassword(
         auth,
         values.email,
         values.password
       );
-      const user = userCredential.user; // Obtenha a referência do usuário
+      const professor = newProfessor.user;
+      console.log("deu certo");
+
+      // Quando o usuário é criado com sucesso no firebase,
+      // Tem que criar no banco de dados, usando o ID do firebase
+      // E tratar o erro tbm!
 
       try {
-        // Tentar inserir no banco de dados
-        const response = await axios.post(
+        const createProfessorDB = await axios.post(
           `${import.meta.env.VITE_API_URL}dashboard/newprofessor`,
           {
-            id: user.uid, // Use user.uid para obter o ID do usuário criado
+            id: professor.uid, //
             nome: values.nome,
             email: values.email,
           },
@@ -62,12 +65,9 @@ export const NovoProfessor = () => {
         );
 
         toast.success("Professor criado com sucesso!");
-      } catch (dbError) {
-        await deleteUser(user);
-
-        toast.error("Algo deu errado!", {
-          description: "Tente novamente mais tarde.",
-        });
+      } catch (error) {
+        await deleteUser(professor);
+        console.log("deu pau no bd");
       }
     } catch (authError) {
       toast.error("E-mail já em uso.", {
@@ -78,9 +78,23 @@ export const NovoProfessor = () => {
       setLoading(false);
     }
   }
+
+  // async function onSubmit(values: z.infer<typeof novo_professor_type>) {
+  //   try {
+  //     const user = await createUserWithEmailAndPassword(
+  //       auth,
+  //       values.email,
+  //       values.password
+  //     );
+  //     console.log(user);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
   return (
-    <div className="flex justify-center ">
-      <div className="w-4/12 shadow-[0_3px_10px_rgb(0,0,0,0.2)] px-4 py-4 bg-slate-50">
+    <div className="md:flex md:justify-center  px-4">
+      <Link to="/dashboard/professores">Voltar</Link>
+      <div className="md:w-4/12 shadow-[0_3px_10px_rgb(0,0,0,0.2)] px-4 py-4 bg-slate-50">
         <div>
           <h1 className="text-xl font-semibold">Novo Professor</h1>
 

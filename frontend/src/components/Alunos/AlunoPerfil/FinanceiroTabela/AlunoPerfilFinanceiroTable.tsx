@@ -95,7 +95,7 @@ export const AlunoPerfilFinanceiroTable = () => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative px-4">
       <Dialog>
         {notMatriculado ? (
           <div onClick={toastMatricula}>
@@ -106,7 +106,7 @@ export const AlunoPerfilFinanceiroTable = () => {
             <BtnTabela label="Nova Cobrança" />
           </DialogTrigger>
         )}
-        <DialogContent>
+        <DialogContent className="w-4/5">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               {matricula_aluno && (
@@ -125,16 +125,21 @@ export const AlunoPerfilFinanceiroTable = () => {
         <h1>Aluno não está matriculado.</h1>
       ) : (
         <Table>
-          <TableCaption>Todas as cobranças do John Doe.</TableCaption>
           <TableHeader>
             <TableRow className="bg-gray-100">
               <TableHead>Referencia</TableHead>
-              <TableHead className="w-[250px]">Dia Vencimento</TableHead>
+              <TableHead className="w-[250px] md:table-cell hidden">
+                Dia Vencimento
+              </TableHead>
 
               <TableHead>Status</TableHead>
 
-              <TableHead className="text-right">Valor</TableHead>
-              <TableHead className="text-right">Ações</TableHead>
+              <TableHead className="text-right md:table-cell hidden">
+                Valor
+              </TableHead>
+              <TableHead className="text-right md:table-cell hidden">
+                Ações
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

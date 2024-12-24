@@ -80,8 +80,6 @@ export const RegisterGym = ({ admin_id }: RegisterGymProps) => {
   }
   return (
     <div>
-      <h1>{admin_id}</h1>
-
       <Form {...form}>
         <form className=" " onSubmit={form.handleSubmit(onSubmit)}>
           <div className=" m-auto  2xl:w-2/5 xl:w-6/12">

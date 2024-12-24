@@ -65,8 +65,6 @@ export const LoginForm = () => {
   }
   return (
     <Form {...form}>
-      <Button onClick={() => console.log("currentUser")}>current</Button>
-
       <form className="pt-5" onSubmit={form.handleSubmit(onSubmit)}>
         <div className="mb-2">
           <FormField

@@ -18,7 +18,6 @@ export const DashboardNavbar = () => {
             <div className="hidden md:flex">
               <DashboardNavbarMenu />
             </div>
-            <h1 className="text-white">{user?.email}</h1>
           </div>
 
           <div>

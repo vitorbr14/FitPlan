@@ -65,8 +65,6 @@ export const novoTreinoSchema = z.object({
 });
 
 export const NovoTreino = () => {
-  const { isAlunoMatriculado } = useCheckMatricula("11");
-
   const queryClient = useQueryClient();
 
   // Requests
@@ -186,7 +184,7 @@ export const NovoTreino = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-3">
+            <div className="md:col-span-3 col-span-12">
               <FormField
                 control={form.control}
                 name="objetivo_id"
@@ -218,7 +216,7 @@ export const NovoTreino = () => {
               />
             </div>
 
-            <div className="col-span-3">
+            <div className="md:col-span-3 col-span-12">
               <FormField
                 control={form.control}
                 name="frequencia_id"
@@ -252,7 +250,7 @@ export const NovoTreino = () => {
               />
             </div>
 
-            <div className="col-span-3">
+            <div className="md:col-span-3 col-span-12">
               <div className="mt-2">
                 <FormField
                   control={form.control}
@@ -266,12 +264,14 @@ export const NovoTreino = () => {
                             <Button
                               variant={"outline"}
                               className={cn(
-                                "",
-                                !field.value && "text-muted-foreground z-50"
+                                "overflow-hidden",
+                                !field.value && "text-muted-foreground z-50 "
                               )}
                             >
-                              {field.value ? format(field.value, "PPP") : ""}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              {field.value
+                                ? format(field.value, "MM/dd/yyyy")
+                                : ""}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50 " />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
@@ -291,7 +291,7 @@ export const NovoTreino = () => {
                 />
               </div>
             </div>
-            <div className="col-span-3">
+            <div className="md:col-span-3 col-span-12">
               <div className="mt-2">
                 <FormField
                   control={form.control}
@@ -309,7 +309,9 @@ export const NovoTreino = () => {
                                 !field.value && "text-muted-foreground"
                               )}
                             >
-                              {field.value ? format(field.value, "PPP") : ""}
+                              {field.value
+                                ? format(field.value, "MM/dd/yyyy")
+                                : ""}
                               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>
                           </FormControl>

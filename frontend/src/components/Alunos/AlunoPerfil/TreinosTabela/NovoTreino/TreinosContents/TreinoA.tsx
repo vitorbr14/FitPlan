@@ -79,7 +79,7 @@ export const TreinoA = ({
         >
           Novo exercicio
         </Button>
-        <Table>
+        <Table className=" ">
           <TableHeader>
             <TableRow>
               <TableHead>Exercicio</TableHead>
@@ -87,7 +87,7 @@ export const TreinoA = ({
             </TableRow>
           </TableHeader>
 
-          <TableBody className="">
+          <TableBody className="w-full">
             {fields &&
               fields.map((field, index) => {
                 return (
@@ -104,8 +104,6 @@ export const TreinoA = ({
                   </TableRow>
                 );
               })}
-
-            <TableCell className="w-[200px]"></TableCell>
           </TableBody>
         </Table>
       </div>

@@ -82,7 +82,7 @@ export const TreinoTabela = () => {
           </DialogTrigger>
         )}
 
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="w-4/5 md:w-5/5">
           <NovoTreino />
         </DialogContent>
       </Dialog>
@@ -90,13 +90,17 @@ export const TreinoTabela = () => {
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="">Ficha</TableHead>
-            <TableHead>Objetivo</TableHead>
+            <TableHead className="md:table-cell ">Ficha</TableHead>
+            <TableHead className="md:table-cell hidden">Objetivo</TableHead>
 
-            <TableHead className="text-right">Inicio</TableHead>
-            <TableHead className="text-right">Validade</TableHead>
+            <TableHead className="text-right md:table-cell hidden">
+              Inicio
+            </TableHead>
+            <TableHead className="text-right md:table-cell hidden">
+              Validade
+            </TableHead>
 
-            <TableHead className="text-right">Ações</TableHead>
+            <TableHead className="text-right md:table-cell ">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -104,25 +108,27 @@ export const TreinoTabela = () => {
             data.map((treino: Treino, index: number) => {
               return (
                 <TableRow>
-                  <TableCell className="font-medium">
+                  <TableCell className="font-medium md:table-cell ">
                     Ficha #{index + 1}
                   </TableCell>
-                  <TableCell>{treino.objetivo.objetivo}</TableCell>
+                  <TableCell className="md:table-cell hidden">
+                    {treino.objetivo.objetivo}
+                  </TableCell>
 
-                  <TableCell className="text-right">
+                  <TableCell className="text-right md:table-cell hidden">
                     {formatarData(treino.inicio_treino)}
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right md:table-cell hidden">
                     {" "}
                     {treino.vencimento_treino
                       ? formatarData(treino.vencimento_treino)
                       : "Sem validade"}
                   </TableCell>
 
-                  <TableCell className="text-right">
+                  <TableCell className="text-right md:table-cell">
                     <Dialog>
                       <DialogTrigger>
-                        <Button>Editar</Button>
+                        <Button>Ver</Button>
                       </DialogTrigger>
                       <DialogContent>
                         <DialogHeader>

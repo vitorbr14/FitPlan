@@ -11,8 +11,6 @@ import {
 import { EditarAlunoForm } from "./EditarAluno/EditarAlunoForm";
 
 export const AlunoInfos = () => {
-  // Aqui tem o GET das inforamações do Aluno da Api.
-
   return (
     <div className="relative ">
       <Dialog>

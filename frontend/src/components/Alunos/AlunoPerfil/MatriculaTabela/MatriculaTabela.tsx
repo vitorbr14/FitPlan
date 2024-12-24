@@ -20,6 +20,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Toaster } from "@/components/ui/sonner";
+import useEmblaCarousel from "embla-carousel-react";
 import { toast } from "sonner";
 import { MatriculaPagamento } from "./NovaMatricula/MatriculaPagamento";
 import { Button } from "@/components/ui/button";
@@ -127,15 +128,18 @@ export const MatriculaTabela = () => {
           <DialogTrigger>
             <BtnTabela label=" Nova Matrícula" />
           </DialogTrigger>
-          <DialogContent className="">
-            <DialogHeader>
+          <DialogContent className="w-4/5">
+            <DialogHeader className="text-left">
               <DialogTitle>Criar nova matrícula.</DialogTitle>
             </DialogHeader>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="relative overflow-x-hidden"
+              >
+                <div className="">
                   <span className="font-semibold">Tipo de plano:</span>
-                  <div className="py-4 ">
+                  <div className="py-4  ">
                     <NovaMatriculaPlanos form={form} />
                   </div>
                 </div>
@@ -149,19 +153,23 @@ export const MatriculaTabela = () => {
                   </div>
 
                   <div className="flex py-4">
-                    <DialogFooter>
+                    <DialogClose asChild>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        className="md:w-[10em] mr-3"
+                      >
+                        Cancelar
+                      </Button>
+                    </DialogClose>
+                    <DialogFooter className="gap-3">
                       <Button
                         type="submit"
-                        className="w-[10em]"
+                        className="md:w-[10em] "
                         disabled={isPending}
                       >
                         {isPending ? <LoadingSpinner /> : "Concluir Matrícula"}
                       </Button>
-                      <DialogClose asChild>
-                        <Button type="button" variant="destructive">
-                          Cancelar
-                        </Button>
-                      </DialogClose>
                     </DialogFooter>
                   </div>
                 </div>

@@ -36,21 +36,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         setUserLoading(false);
       }
     });
-
-    onIdTokenChanged(auth, (user) => {
-      if (user) {
-        user
-          .getIdToken()
-          .then((token) => {
-            Cookies.set("jwt", token); // Salva o token no cookie
-          })
-          .catch((error) => {
-            console.error("Error fetching token:", error);
-          });
-      } else {
-        Cookies.remove("jwt"); // Remove o token se o usuário não estiver logado
-      }
-    });
   }, []);
 
   return (

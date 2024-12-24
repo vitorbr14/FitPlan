@@ -34,7 +34,7 @@ export function MatriculaPagamento({ form }: TypeMatriculaPagamento) {
             name="inicio_matricula"
             render={({ field }) => (
               <FormItem className="">
-                <div className="flex w-[25em] items-center justify-between ">
+                <div className="flex w-[25em] flex-col md:flex-row md:items-center md:justify-between ">
                   <FormLabel>Começo da matrícula</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>

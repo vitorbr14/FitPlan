@@ -1,5 +1,14 @@
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+
+import { Pagination } from "swiper/modules";
+
+import useEmblaCarousel from "embla-carousel-react";
 import {
   Form,
   FormControl,
@@ -8,6 +17,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { planoSchema } from "../MatriculaTabela";
@@ -22,6 +38,7 @@ type TypePropsNovaMatriculaPlanos = {
   form: UseFormReturn<z.infer<typeof planoSchema>>;
 };
 export const NovaMatriculaPlanos = ({ form }: TypePropsNovaMatriculaPlanos) => {
+  const [slide, setSlides] = useState(3);
   const fetchPlanos = async (): Promise<planosType[]> => {
     const fetiching = await axios.get(
       `${import.meta.env.VITE_API_URL}aluno/planos`,
@@ -38,7 +55,7 @@ export const NovaMatriculaPlanos = ({ form }: TypePropsNovaMatriculaPlanos) => {
 
   if (isPending) return <NovaMatriculaPlanos_Skeleton />;
   return (
-    <>
+    <div className="relative">
       <FormField
         control={form.control}
         name="plano"
@@ -49,50 +66,60 @@ export const NovaMatriculaPlanos = ({ form }: TypePropsNovaMatriculaPlanos) => {
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className="grid grid-cols-12"
+                className=""
                 value={form.watch("plano")}
               >
-                {/* 
-grid grid-cols-12 ">
-<div className=" md:col-span-8 col-span-12"> */}
-
-                {data?.map((plano) => {
-                  return (
-                    <div
-                      className=" items-center space-x-2 col-span-4 bg-gray-50"
-                      key={plano.id}
-                    >
-                      <div className="border   h-24 rounded-sm  checked:bg-yellow-300 ">
-                        <div className=" p-3">
-                          <div className="flex justify-between items-center ">
-                            <div className="flex flex-col">
-                              <span className="text-sm">{plano.plano}</span>
-                              {/* <span className="text-xs text-gray-500 italic">
-                                {plano.plano}
-                              </span> */}
+                <Swiper
+                  className=""
+                  modules={[Pagination]}
+                  preventClicks={false}
+                  pagination={{
+                    clickable: true,
+                  }}
+                  breakpoints={{
+                    640: {
+                      slidesPerView: 1,
+                      spaceBetween: 20,
+                    },
+                    768: {
+                      slidesPerView: 3,
+                      spaceBetween: 5,
+                    },
+                  }}
+                >
+                  {data?.map((plano) => (
+                    <SwiperSlide className="">
+                      <div
+                        key={plano.id}
+                        className=" bg-gray-100 rounded-xl h-full"
+                      >
+                        <div className="flex justify-between p-2  h-full items-center ">
+                          <div className="w-16 text-left">
+                            <div className="text-sm font-bold">
+                              {plano.plano}
                             </div>
-                            <div>
-                              <FormItem>
-                                <FormControl>
-                                  <RadioGroupItem value={plano.id.toString()} />
-                                </FormControl>
-                              </FormItem>
+                            <div className="font-semibold">
+                              {plano.plano_price} R$
                             </div>
                           </div>
-                          <div className="mt-3 font-bold">
-                            <h1>R$ {plano.plano_price}</h1>
+                          <div className="">
+                            <FormItem className=" h-8 ">
+                              <FormControl>
+                                <RadioGroupItem value={plano.id.toString()} />
+                              </FormControl>
+                            </FormItem>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
               </RadioGroup>
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
-    </>
+    </div>
   );
 };

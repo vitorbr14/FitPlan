@@ -49,6 +49,7 @@ type TypeGrupoMuscular = {
   treino_dia: treinos_letra;
   sets: setstype[] | undefined;
 };
+
 const GrupoMuscular = ({
   index,
   formControl,
@@ -65,7 +66,7 @@ const GrupoMuscular = ({
 
   return (
     <>
-      <TableCell className="w-[150px]">
+      <TableCell className="w-full ">
         <FormField
           control={formControl.control}
           name={`${treino_dia}.${index}.exercise_id`}
@@ -78,20 +79,20 @@ const GrupoMuscular = ({
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        "w-full justify-between",
-                        !field.value && "text-muted-foreground"
+                        `w-[150px] md:w-[50%]  justify-between text-xs md:text-[1em] overflow-hidden `,
+                        !field.value && "text-muted-foreground  w-[150px]"
                       )}
                     >
                       {field.value
                         ? exercicios.find(
                             (language) => language.id.toString() === field.value
                           )?.nome_exercicio
-                        : "Selecione um exércicio"}
+                        : ""}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-[300px] p-0">
+                <PopoverContent className="w-full p-0">
                   <Command>
                     <CommandInput placeholder="Procurar exercicio" />
                     <CommandList>
@@ -111,7 +112,7 @@ const GrupoMuscular = ({
                             {language.nome_exercicio}
                             <Check
                               className={cn(
-                                "ml-auto",
+                                "w-full ml-auto ",
                                 language.id.toString() === field.value
                                   ? "opacity-100"
                                   : "opacity-0"
@@ -130,7 +131,7 @@ const GrupoMuscular = ({
           )}
         />
       </TableCell>
-      <TableCell className="w-[150px]">
+      <TableCell className="w-full">
         <FormField
           control={formControl.control}
           name={`${treino_dia}.${index}.set_id`}
@@ -141,8 +142,8 @@ const GrupoMuscular = ({
                 defaultValue={field.value.toString()}
               >
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione os sets" />
+                  <SelectTrigger className="w-[100px] ">
+                    <SelectValue placeholder="" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

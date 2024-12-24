@@ -25,7 +25,7 @@ export const AlunoPerfilFinanceiroRow = ({
     <>
       <TableRow key={cobranca.id}>
         <TableCell>{getMonth_and_year(cobranca.data)} </TableCell>
-        <TableCell className="font-medium">
+        <TableCell className="font-medium md:table-cell hidden">
           {formatarData(cobranca.data_vencimento)}
         </TableCell>
 
@@ -39,10 +39,10 @@ export const AlunoPerfilFinanceiroRow = ({
 
           {cobranca.status === "PAGO" && <Badge variant="default">Paga</Badge>}
         </TableCell>
-        <TableCell className="text-right">
+        <TableCell className="text-right md:table-cell hidden">
           R$ {cobranca.preco.toString()}
         </TableCell>
-        <TableCell className="text-right ">
+        <TableCell className="text-right md:table-cell hidden ">
           <Dialog>
             <DialogTrigger>
               <Button className="mr-2" variant="outline">

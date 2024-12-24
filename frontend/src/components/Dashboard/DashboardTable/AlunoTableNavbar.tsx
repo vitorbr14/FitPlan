@@ -24,14 +24,12 @@ export const AlunoTableNavbar = ({ fetchName }: AlunoTableNavbarProps) => {
         <div className="flex justify-between items-center">
           <div className="">
             <div className="text-white flex">
-              <FaPlus className="text-2xl mr-2" />
-
               <Link
                 to={`/dashboard/${
                   fetchName === "alunos" ? "novoaluno" : "novoprofessor"
                 }`}
               >
-                {" "}
+                <FaPlus className="text-2xl mr-2" />
                 <span className="md:block hidden">
                   Adicionar Novo{""}
                   {fetchName === "alunos" ? " Aluno" : " Professor"}
