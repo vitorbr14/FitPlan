@@ -13,6 +13,7 @@ export const authMiddleware = async (
   }
 
   const token = authorization.split(" ")[1];
+  console.log({ token: token });
   const isloggedIn = admin
     .auth()
     .verifyIdToken(token)

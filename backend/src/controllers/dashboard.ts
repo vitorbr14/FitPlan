@@ -115,6 +115,8 @@ export const newAluno = async (req: Request, res: Response) => {
   if (!findGym_id) {
     throw new NotFoundError("Professor não encontrado.");
   }
+
+  console.log(user_id);
   const createAluno = await prisma.aluno.create({
     data: {
       email: email,
@@ -127,7 +129,7 @@ export const newAluno = async (req: Request, res: Response) => {
   if (!createAluno) {
     throw new BadRequestError("Algo deu errado, tente novamente mais tarde.");
   }
-  res.json({ createAluno });
+  res.json({ apagar: "createAluno" });
 };
 
 type createProfessorType = {
@@ -140,16 +142,13 @@ type createProfessorType = {
 export const createProfessor = async (req: Request, res: Response) => {
   const { id, nome, email } = req.body;
   const { user_id } = req;
-  // if (!id || !nome || !email) {
-  //   throw new BadRequestError("Insira todos os campos, por favor!");
-  // }
 
   const findGym_id = await prisma.professor.findUnique({
     where: {
       id: user_id,
     },
   });
-
+  console.log(user_id);
   if (!findGym_id) {
     throw new NotFoundError("Professor não encontrado.");
   }
@@ -169,8 +168,8 @@ export const createProfessor = async (req: Request, res: Response) => {
       "Algo deu errado na criação do professor, tente novamente!"
     );
   }
-
-  res.json({ user_id });
+  console.log(novoProfessor);
+  res.json({ novoProfessor });
 };
 
 export const getProfessores = async (req: Request, res: Response) => {
@@ -198,6 +197,7 @@ export const getProfessores = async (req: Request, res: Response) => {
           contains: search,
           mode: "insensitive",
         },
+        academia_id: Number(findGym_id?.academia_id),
       },
       orderBy: [
         {
@@ -231,6 +231,21 @@ export const getProfessores = async (req: Request, res: Response) => {
       paginas,
     });
   }
+
+  const professorCount = await prisma.professor.findMany({
+    where: {
+      nome: {
+        contains: search,
+        mode: "insensitive",
+      },
+      academia_id: Number(findGym_id?.academia_id),
+    },
+    orderBy: [
+      {
+        id: "asc",
+      },
+    ],
+  });
   const getProfessores = await prisma.professor.findMany({
     orderBy: [
       {
@@ -244,8 +259,9 @@ export const getProfessores = async (req: Request, res: Response) => {
     },
   });
 
+  const paginasSemSearch = Math.ceil(professorCount.length / Number(take));
   res.json({
     alunos: getProfessores,
-    paginas,
+    paginas: paginasSemSearch,
   });
 };
